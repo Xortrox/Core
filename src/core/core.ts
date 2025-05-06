@@ -65,6 +65,7 @@ export class Highlite {
 
     testListen(...args: any[]) {
         console.log("Here");
+        console.log(...args);
     }
 
     registerClass(sourceClass : string, mappedName : string) : boolean {

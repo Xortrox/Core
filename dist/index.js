@@ -83,6 +83,7 @@ class Highlite {
   }
   testListen(...args) {
     console.log("Here");
+    console.log(...args);
   }
   registerClass(sourceClass, mappedName) {
     const minifiedClass = document.client.get(sourceClass);
