@@ -56,7 +56,7 @@ export class Highlite {
         (function (originalFunction : any) {
             listenerClassObject["add"] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
-                testListen.apply(self, arguments);
+                this.testListen.apply(self, arguments);
                 return returnValue;
             }
         }(listenerClassObject["add"]));
