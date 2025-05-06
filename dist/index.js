@@ -35,6 +35,7 @@ class Highlite {
   pluginLoader = new PluginLoader;
   constructor() {
     console.log("Highlite Core Initializing!");
+    document.highlite = {};
     document.highlite.gameHooks = {};
     document.highlite.gameHooks.Instances = {};
     document.highlite.gameHooks.Functions = {};
@@ -98,6 +99,6 @@ class RememberMe extends Plugin {
 }
 
 // src/index.ts
-document.highlite = new Highlite;
+new Highlite;
 document.highlite.pluginLoader.registerPlugin(RememberMe);
 document.highlite.start();
