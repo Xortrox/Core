@@ -50,7 +50,7 @@ export class Highlite {
     }
 
     hookListeners(listenerClass: string) {
-        const listenerClassObject = document.client.get(listenerClass);
+        const listenerClassObject = document.client.get(listenerClass).prototype;
         const oldListenerAddFunc = listenerClassObject.add;
         const intermediate = this.testListen.bind(this);
         const newListenerAddFunc = function(e : any) {
