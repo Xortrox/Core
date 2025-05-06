@@ -37,8 +37,10 @@ class Highlite {
     console.log("Highlite Core Initializing!");
     document.highlite = {};
     document.highlite.gameHooks = {};
+    document.highlite.gameHooks.Classes = {};
     document.highlite.gameHooks.Instances = {};
     document.highlite.gameHooks.Functions = {};
+    this.registerClass("LF", "MainPlayer");
     this.registerClassInstance("mk", "EntityManager");
     this.registerClassInstance("hN", "GroundItemManager");
     this.registerClassInstance("oF", "MeshManager");
@@ -53,6 +55,7 @@ class Highlite {
     this.registerClassInstance("Dz", "SocketManager");
     this.registerClassInstance("Nz", "ItemManager");
     this.registerClassInstance("kz", "GameEngine");
+    this.registerFunctionHook("MainPlayer", "OnMoveListener");
   }
   start() {
     console.log("Highlite Core Started!");
@@ -68,6 +71,26 @@ class Highlite {
     this.stop();
     this.start();
   }
+  hook(functionName, ...args) {
+    for (const plugin of this.pluginLoader.plugins) {
+      if (typeof plugin[functionName] === "function") {
+        try {
+          plugin[functionName].apply(plugin, args);
+        } catch (e) {
+          console.error(`[GenLite Core] Plugin ${plugin.constructor.pluginName} errored using ${functionName}: ${e}`);
+        }
+      }
+    }
+  }
+  registerClass(sourceClass, mappedName) {
+    const minifiedClass = document.client.get(sourceClass);
+    if (!minifiedClass) {
+      console.log(`${sourceClass} (${mappedName}) is not defined.`);
+      return false;
+    }
+    document.highlite.gameHooks.Classes[mappedName] = minifiedClass;
+    return true;
+  }
   registerClassInstance(sourceClass, mappedName) {
     const classInstance = document.client.get(sourceClass);
     if (!classInstance) {
@@ -77,7 +100,18 @@ class Highlite {
     document.highlite.gameHooks.Instances[mappedName] = classInstance.Instance;
     return true;
   }
-  registerFunctionHook() {}
+  registerFunctionHook(className, functionName, hookFn = this.hook) {
+    const self = this;
+    const object = document.highlite.gameHooks.Classes[className].prototype;
+    const hookName = `${className}_${functionName}`;
+    (function(originalFunction) {
+      object[functionName] = function(...args) {
+        const returnValue = originalFunction.apply(this, arguments);
+        hookFn.apply(self, [hookName, ...args, this]);
+        return returnValue;
+      };
+    })(object[functionName]);
+  }
 }
 
 // src/core/interfaces/plugin.class.ts
