@@ -72,13 +72,10 @@ class Highlite {
   hookListeners(listenerClass, hookFn = this.testListen) {
     const self = this;
     const listenerClassObject = document.client.get(listenerClass).prototype;
-    (function(originalFunction) {
-      listenerClassObject["add"] = function(...args) {
-        const returnValue = originalFunction.apply(this, arguments);
-        hookFn.apply(self, args);
-        return returnValue;
-      };
-    })(listenerClassObject["add"]);
+    const originalFunction = listenerClass.add;
+    listenerClassObject["add"] = function(...args) {
+      console.log("Here");
+    };
   }
   testListen(...args) {
     console.log(...args);
