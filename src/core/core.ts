@@ -6,7 +6,13 @@ export class Highlite {
 
     constructor() {
         console.log("Highlite Core Initializing!");
+
+        document.highlite.gameHooks = {}
+        document.highlite.gameHooks.Instances = {}
+        document.highlite.gameHooks.Functions = {}
+
         // Data Hook-ins
+        this.registerClassInstance("mk", "EntityManager");
 
         // Function Hook-ins
     }
@@ -28,8 +34,16 @@ export class Highlite {
         this.start();
     }
 
-    registerDataInstance() {
+    registerClassInstance(sourceClass : string, mappedName : string) : boolean {
+        const classInstance = document.client.get(sourceClass);
 
+        if (!classInstance) {
+            console.log(`${sourceClass} (${mappedName}) is not defined.`);
+            return false;
+        }
+
+        document.highlite.gameHooks.Instances[mappedName] = classInstance.Instance;
+        return true;
     }
 
     registerFunctionHook() {

@@ -35,6 +35,10 @@ class Highlite {
   pluginLoader = new PluginLoader;
   constructor() {
     console.log("Highlite Core Initializing!");
+    document.highlite.gameHooks = {};
+    document.highlite.gameHooks.Instances = {};
+    document.highlite.gameHooks.Functions = {};
+    this.registerClassInstance("mk", "EntityManager");
   }
   start() {
     console.log("Highlite Core Started!");
@@ -50,7 +54,15 @@ class Highlite {
     this.stop();
     this.start();
   }
-  registerDataInstance() {}
+  registerClassInstance(sourceClass, mappedName) {
+    const classInstance = document.client.get(sourceClass);
+    if (!classInstance) {
+      console.log(`${sourceClass} (${mappedName}) is not defined.`);
+      return false;
+    }
+    document.highlite.gameHooks.Instances[mappedName] = classInstance.Instance;
+    return true;
+  }
   registerFunctionHook() {}
 }
 
