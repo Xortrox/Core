@@ -69,6 +69,7 @@ class Highlite {
 
 // src/core/interfaces/plugin.class.ts
 class Plugin {
+  instanceHooks = document.highlite.gameHooks.Instances;
   log(...args) {
     console.log(`[${this.pluginName}]`, args);
   }

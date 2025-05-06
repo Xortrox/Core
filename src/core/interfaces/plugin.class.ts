@@ -5,6 +5,8 @@ export abstract class Plugin {
     abstract stop(): Promise<void>;
     postInit?(): Promise<void>;
 
+    instanceHooks = document.highlite.gameHooks.Instances;
+
     log(...args: any[]) : void {
         console.log(`[${this.pluginName}]`, args);
     }
