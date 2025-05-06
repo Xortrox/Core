@@ -61,6 +61,15 @@ export class Highlite {
                 return returnValue;
             }
         }(listenerClassObject["add"]));
+
+
+        (function (originalFunction : any) {
+            listenerClassObject["invoke"] = function (...args : Array<unknown>) {
+                const returnValue = originalFunction.apply(this, arguments);
+                console.warn(args)
+                return returnValue;
+            }
+        }(listenerClassObject["invoke"]));
     }
 
     registerClass(sourceClass : string, mappedName : string) : boolean {

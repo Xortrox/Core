@@ -79,6 +79,13 @@ class Highlite {
         return returnValue;
       };
     })(listenerClassObject["add"]);
+    (function(originalFunction) {
+      listenerClassObject["invoke"] = function(...args) {
+        const returnValue = originalFunction.apply(this, arguments);
+        console.warn(args);
+        return returnValue;
+      };
+    })(listenerClassObject["invoke"]);
   }
   registerClass(sourceClass, mappedName) {
     const minifiedClass = document.client.get(sourceClass);
