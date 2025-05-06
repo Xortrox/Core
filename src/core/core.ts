@@ -1,3 +1,4 @@
+import { listen } from "bun";
 import { PluginLoader } from "./pluginLoader";
 import { RememberMe } from "./plugins/RememberMe";
 
@@ -13,7 +14,7 @@ export class Highlite {
         document.highlite.gameHooks.Listeners = {};
 
         // Listeners Hook-In
-        this.hookListeners("NI");
+        this.attachListeners("NI");
 
         // Instance Hook-ins
         this.registerClassInstance("mk", "EntityManager");
@@ -49,23 +50,17 @@ export class Highlite {
         this.start();
     }
 
-    hookListeners(listenerClass: string, hookFn = this.testListen) {
+    attachListeners(listenerClass: string) {
         const self = this;
         const listenerClassObject = document.client.get(listenerClass).prototype;
 
         (function (originalFunction : any) {
-            listenerClassObject["add"] = function (...args : Array<unknown>) {
+            listenerClassObject["invoke"] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
-                console.log(...args);
-                hookFn.apply(self, args);
+                console.warn("Invoked");
                 return returnValue;
             }
-        }(listenerClassObject["add"]));
-    }
-
-    testListen(...args: any[]) {
-        console.warn("Here\n");
-        console.warn(...args);
+        }(listenerClassObject["invoke"]));
     }
 
     registerClass(sourceClass : string, mappedName : string) : boolean {

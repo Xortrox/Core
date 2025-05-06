@@ -39,7 +39,7 @@ class Highlite {
     document.highlite.gameHooks = {};
     document.highlite.gameHooks.Instances = {};
     document.highlite.gameHooks.Listeners = {};
-    this.hookListeners("NI");
+    this.attachListeners("NI");
     this.registerClassInstance("mk", "EntityManager");
     this.registerClassInstance("hN", "GroundItemManager");
     this.registerClassInstance("oF", "MeshManager");
@@ -69,22 +69,16 @@ class Highlite {
     this.stop();
     this.start();
   }
-  hookListeners(listenerClass, hookFn = this.testListen) {
+  attachListeners(listenerClass) {
     const self = this;
     const listenerClassObject = document.client.get(listenerClass).prototype;
     (function(originalFunction) {
-      listenerClassObject["add"] = function(...args) {
+      listenerClassObject["invoke"] = function(...args) {
         const returnValue = originalFunction.apply(this, arguments);
-        console.log(...args);
-        hookFn.apply(self, args);
+        console.warn("Invoked");
         return returnValue;
       };
-    })(listenerClassObject["add"]);
-  }
-  testListen(...args) {
-    console.warn(`Here
-`);
-    console.warn(...args);
+    })(listenerClassObject["invoke"]);
   }
   registerClass(sourceClass, mappedName) {
     const minifiedClass = document.client.get(sourceClass);
