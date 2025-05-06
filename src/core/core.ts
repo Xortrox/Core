@@ -57,7 +57,7 @@ export class Highlite {
         (function (originalFunction : any) {
             listenerClassObject["add"] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
-                console.warn("added");
+                console.warn(`Added ${args[0].name}`);
                 return returnValue;
             }
         }(listenerClassObject["add"]));

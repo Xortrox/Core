@@ -75,7 +75,7 @@ class Highlite {
     (function(originalFunction) {
       listenerClassObject["add"] = function(...args) {
         const returnValue = originalFunction.apply(this, arguments);
-        console.warn("added");
+        console.warn(`Added ${args[0].name}`);
         return returnValue;
       };
     })(listenerClassObject["add"]);
