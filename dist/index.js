@@ -99,6 +99,6 @@ class RememberMe extends Plugin {
 }
 
 // src/index.ts
-new Highlite;
-document.highlite.pluginLoader.registerPlugin(RememberMe);
-document.highlite.start();
+var highlite = new Highlite;
+highlite.pluginLoader.registerPlugin(RememberMe);
+highlite.start();
