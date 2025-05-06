@@ -56,6 +56,7 @@ export class Highlite {
         (function (originalFunction : any) {
             listenerClassObject["add"] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
+                console.log(...args);
                 hookFn.apply(self, args);
                 return returnValue;
             }
@@ -63,7 +64,7 @@ export class Highlite {
     }
 
     testListen(...args: any[]) {
-        console.log(...args);
+        console.log("Here");
     }
 
     registerClass(sourceClass : string, mappedName : string) : boolean {

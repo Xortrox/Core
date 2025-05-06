@@ -75,13 +75,14 @@ class Highlite {
     (function(originalFunction) {
       listenerClassObject["add"] = function(...args) {
         const returnValue = originalFunction.apply(this, arguments);
+        console.log(...args);
         hookFn.apply(self, args);
         return returnValue;
       };
     })(listenerClassObject["add"]);
   }
   testListen(...args) {
-    console.log(...args);
+    console.log("Here");
   }
   registerClass(sourceClass, mappedName) {
     const minifiedClass = document.client.get(sourceClass);
