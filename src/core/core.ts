@@ -8,13 +8,12 @@ export class Highlite {
         console.log("Highlite Core Initializing!");
 
         document.highlite = {};
-        document.highlite.gameHooks = {}
-        document.highlite.gameHooks.Classes = {}
-        document.highlite.gameHooks.Instances = {}
-        document.highlite.gameHooks.Functions = {}
+        document.highlite.gameHooks = {};
+        document.highlite.gameHooks.Instances = {};
+        document.highlite.gameHooks.Listeners = {};
 
-        // Class Hook-ins (Moslty useful for Function Hook-ins)
-        this.registerClass("LF", "MainPlayer");
+        // Listeners Hook-In
+        this.hookListeners("NI");
 
         // Instance Hook-ins
         this.registerClassInstance("mk", "EntityManager");
@@ -31,9 +30,6 @@ export class Highlite {
         this.registerClassInstance("Dz", "SocketManager");
         this.registerClassInstance("Nz", "ItemManager");
         this.registerClassInstance("kz", "GameEngine");
-
-        // Function Hook-ins (Relies on Class Hook-ins)
-        this.registerFunctionHook("MainPlayer", "OnMoveListener")
     }
 
     start() {
@@ -53,16 +49,19 @@ export class Highlite {
         this.start();
     }
 
-    hook(functionName : string, ...args : Array<unknown>) {
-        for (const plugin of this.pluginLoader.plugins) {
-            if (typeof plugin[functionName] === 'function') {
-                try {
-                    plugin[functionName].apply(plugin, args);
-                } catch (e) {
-                    console.error(`[GenLite Core] Plugin ${plugin.constructor.pluginName} errored using ${functionName}: ${e}`);
-                }
-            }
+    hookListeners(listenerClass: string) {
+        const listenerClassObject = document.client.get(listenerClass);
+        const oldListenerAddFunc = listenerClassObject.add;
+        const intermediate = this.testListen.bind(this);
+        const newListenerAddFunc = function(e : any) {
+            intermediate(e);
+            oldListenerAddFunc(e);
         }
+        listenerClassObject.add = newListenerAddFunc;
+    }
+
+    testListen(...args: any[]) {
+        console.log(...args);
     }
 
     registerClass(sourceClass : string, mappedName : string) : boolean {
@@ -87,21 +86,5 @@ export class Highlite {
 
         document.highlite.gameHooks.Instances[mappedName] = classInstance.Instance;
         return true;
-    }
-
-    registerFunctionHook(className : string, functionName : string, hookFn = this.hook) {
-        const self = this;
-        const object = document.highlite.gameHooks.Classes[className].prototype;
-        const hookName = `${className}_${functionName}`;
-
-        (function (originalFunction) {
-            object[functionName] = function (...args: Array<unknown>) {
-                const returnValue = originalFunction.apply(this, arguments);
-
-                hookFn.apply(self, [hookName, ...args, this]);
-
-                return returnValue;
-            };
-        }(object[functionName]));
     }
 }
