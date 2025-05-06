@@ -5,9 +5,6 @@ declare global {
 
     interface Document {
         highlite: {
-            plugins: {
-                [key: string]: any,
-            }
             [key: string]: any,
         }
     }
