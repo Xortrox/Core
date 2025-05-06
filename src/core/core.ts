@@ -34,7 +34,7 @@ export class Highlite {
 
 
         // Function Hook-ins
-        this.registerClassFunctionListener("Rk", "_runGameLoop");
+        this.registerClassFunctionListener("Rk", "_update");
     }
 
     start() {
@@ -104,7 +104,7 @@ export class Highlite {
         const self = this;
         const classObject = document.client.get(sourceClass).prototype;
         const hookName = `${sourceClass}_${fnName}`;
-
+        console.log("Hooking");
         (function (originalFunction : any) {
             classObject[fnName] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
@@ -112,6 +112,8 @@ export class Highlite {
                 return returnValue;
             }
         }(classObject[fnName]));
+
+        return true;
     }
 
 

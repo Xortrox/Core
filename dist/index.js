@@ -53,7 +53,7 @@ class Highlite {
     this.registerClassInstance("Dz", "SocketManager");
     this.registerClassInstance("Nz", "ItemManager");
     this.registerClassInstance("kz", "GameEngine");
-    this.registerClassFunctionListener("Rk", "_runGameLoop");
+    this.registerClassFunctionListener("Rk", "_update");
   }
   start() {
     console.log("Highlite Core Started!");
@@ -82,6 +82,7 @@ class Highlite {
     const self = this;
     const classObject = document.client.get(sourceClass).prototype;
     const hookName = `${sourceClass}_${fnName}`;
+    console.log("Hooking");
     (function(originalFunction) {
       classObject[fnName] = function(...args) {
         const returnValue = originalFunction.apply(this, arguments);
@@ -89,6 +90,7 @@ class Highlite {
         return returnValue;
       };
     })(classObject[fnName]);
+    return true;
   }
   hook(fnName, ...args) {
     console.warn("fnName: " + fnName);
