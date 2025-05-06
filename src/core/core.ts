@@ -55,12 +55,12 @@ export class Highlite {
         const listenerClassObject = document.client.get(listenerClass).prototype;
 
         (function (originalFunction : any) {
-            listenerClassObject["invoke"] = function (...args : Array<unknown>) {
+            listenerClassObject["add"] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
-                console.warn("Invoked");
+                console.warn("added");
                 return returnValue;
             }
-        }(listenerClassObject["invoke"]));
+        }(listenerClassObject["add"]));
     }
 
     registerClass(sourceClass : string, mappedName : string) : boolean {

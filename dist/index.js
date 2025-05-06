@@ -73,12 +73,12 @@ class Highlite {
     const self = this;
     const listenerClassObject = document.client.get(listenerClass).prototype;
     (function(originalFunction) {
-      listenerClassObject["invoke"] = function(...args) {
+      listenerClassObject["add"] = function(...args) {
         const returnValue = originalFunction.apply(this, arguments);
-        console.warn("Invoked");
+        console.warn("added");
         return returnValue;
       };
-    })(listenerClassObject["invoke"]);
+    })(listenerClassObject["add"]);
   }
   registerClass(sourceClass, mappedName) {
     const minifiedClass = document.client.get(sourceClass);
