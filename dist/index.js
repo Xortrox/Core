@@ -53,6 +53,7 @@ class Highlite {
     this.registerClassInstance("Dz", "SocketManager");
     this.registerClassInstance("Nz", "ItemManager");
     this.registerClassInstance("kz", "GameEngine");
+    this.registerClassFunctionListener("Rk", "_runGameLoop");
   }
   start() {
     console.log("Highlite Core Started!");
@@ -76,6 +77,30 @@ class Highlite {
     }
     document.highlite.gameHooks.Instances[mappedName] = classInstance.Instance;
     return true;
+  }
+  registerClassFunctionListener(sourceClass, fnName, hookFn = this.hook) {
+    const self = this;
+    const classObject = document.client.get(sourceClass).prototype;
+    const hookName = `${sourceClass}_${fnName}`;
+    (function(originalFunction) {
+      classObject[fnName] = function(...args) {
+        const returnValue = originalFunction.apply(this, arguments);
+        hookFn.apply(self, [hookName, ...args, this]);
+        return returnValue;
+      };
+    })(classObject[fnName]);
+  }
+  hook(fnName, ...args) {
+    console.warn("fnName: " + fnName);
+    for (const plugin of this.pluginLoader.plugins) {
+      if (typeof plugin[fnName] === "function") {
+        try {
+          plugin[fnName].apply(plugin, args);
+        } catch (e) {
+          console.error("Hooking Failed");
+        }
+      }
+    }
   }
 }
 
