@@ -49,14 +49,14 @@ export class Highlite {
         this.start();
     }
 
-    hookListeners(listenerClass: string) {
+    hookListeners(listenerClass: string, hookFn = this.testListen) {
         const self = this;
         const listenerClassObject = document.client.get(listenerClass).prototype;
 
         (function (originalFunction : any) {
             listenerClassObject["add"] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
-                this.testListen.apply(self, arguments);
+                hookFn.apply(self, args);
                 return returnValue;
             }
         }(listenerClassObject["add"]));
