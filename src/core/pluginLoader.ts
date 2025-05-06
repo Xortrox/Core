@@ -5,7 +5,7 @@ export class PluginLoader {
 
     constructor() {
         this.plugins = [];
-        document.highlite.plugins = {};
+        document.highlite['plugins'] = {};
     }
 
     async registerPlugin<T extends Plugin>(pluginClass : new () => T) : Promise<boolean> {
