@@ -3,12 +3,11 @@ class PluginLoader {
   plugins = [];
   constructor() {
     this.plugins = [];
-    document.highlite["plugins"] = {};
   }
   async registerPlugin(pluginClass) {
     const pluginInstance = new pluginClass;
     await pluginInstance.init();
-    document.highlite.plugins[pluginInstance.pluginName] = pluginInstance;
+    document.highlite[pluginInstance.pluginName] = pluginInstance;
     this.plugins.push(pluginInstance);
     return true;
   }
