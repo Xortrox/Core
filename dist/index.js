@@ -39,7 +39,6 @@ class Highlite {
     document.highlite.gameHooks = {};
     document.highlite.gameHooks.Instances = {};
     document.highlite.gameHooks.Listeners = {};
-    this.attachListeners("NI");
     this.registerClassInstance("mk", "EntityManager");
     this.registerClassInstance("hN", "GroundItemManager");
     this.registerClassInstance("oF", "MeshManager");
@@ -68,33 +67,6 @@ class Highlite {
     console.log("Highlite Core Reloading");
     this.stop();
     this.start();
-  }
-  attachListeners(listenerClass) {
-    const self = this;
-    const listenerClassObject = document.client.get(listenerClass).prototype;
-    (function(originalFunction) {
-      listenerClassObject["add"] = function(...args) {
-        const returnValue = originalFunction.apply(this, arguments);
-        console.warn(`Added ${args[0].name}`);
-        return returnValue;
-      };
-    })(listenerClassObject["add"]);
-    (function(originalFunction) {
-      listenerClassObject["invoke"] = function(...args) {
-        const returnValue = originalFunction.apply(this, arguments);
-        console.warn(`Invoke ${args}`);
-        return returnValue;
-      };
-    })(listenerClassObject["invoke"]);
-  }
-  registerClass(sourceClass, mappedName) {
-    const minifiedClass = document.client.get(sourceClass);
-    if (!minifiedClass) {
-      console.log(`${sourceClass} (${mappedName}) is not defined.`);
-      return false;
-    }
-    document.highlite.gameHooks.Classes[mappedName] = minifiedClass;
-    return true;
   }
   registerClassInstance(sourceClass, mappedName) {
     const classInstance = document.client.get(sourceClass);

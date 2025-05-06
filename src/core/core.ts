@@ -14,7 +14,7 @@ export class Highlite {
         document.highlite.gameHooks.Listeners = {};
 
         // Listeners Hook-In
-        this.attachListeners("NI");
+        // this.attachListeners("NI");
 
         // Instance Hook-ins
         this.registerClassInstance("mk", "EntityManager");
@@ -50,39 +50,39 @@ export class Highlite {
         this.start();
     }
 
-    attachListeners(listenerClass: string) {
-        const self = this;
-        const listenerClassObject = document.client.get(listenerClass).prototype;
+    // attachListeners(listenerClass: string) {
+    //     const self = this;
+    //     const listenerClassObject = document.client.get(listenerClass).prototype;
 
-        (function (originalFunction : any) {
-            listenerClassObject["add"] = function (...args : Array<unknown>) {
-                const returnValue = originalFunction.apply(this, arguments);
-                console.warn(`Added ${args[0].name}`);
-                return returnValue;
-            }
-        }(listenerClassObject["add"]));
+    //     (function (originalFunction : any) {
+    //         listenerClassObject["add"] = function (...args : Array<unknown>) {
+    //             const returnValue = originalFunction.apply(this, arguments);
+    //             console.warn(`Added ${args[0].name}`);
+    //             return returnValue;
+    //         }
+    //     }(listenerClassObject["add"]));
 
 
-        (function (originalFunction : any) {
-            listenerClassObject["invoke"] = function (...args : Array<unknown>) {
-                const returnValue = originalFunction.apply(this, arguments);
-                console.warn(`Invoke ${args}`);
-                return returnValue;
-            }
-        }(listenerClassObject["invoke"]));
-    }
+    //     (function (originalFunction : any) {
+    //         listenerClassObject["invoke"] = function (...args : Array<unknown>) {
+    //             const returnValue = originalFunction.apply(this, arguments);
+    //             console.warn(`Invoke ${args}`);
+    //             return returnValue;
+    //         }
+    //     }(listenerClassObject["invoke"]));
+    // }
 
-    registerClass(sourceClass : string, mappedName : string) : boolean {
-        const minifiedClass = document.client.get(sourceClass);
+    // registerClass(sourceClass : string, mappedName : string) : boolean {
+    //     const minifiedClass = document.client.get(sourceClass);
 
-        if (!minifiedClass) {
-            console.log(`${sourceClass} (${mappedName}) is not defined.`);
-            return false;
-        }
+    //     if (!minifiedClass) {
+    //         console.log(`${sourceClass} (${mappedName}) is not defined.`);
+    //         return false;
+    //     }
 
-        document.highlite.gameHooks.Classes[mappedName] = minifiedClass;
-        return true;
-    }
+    //     document.highlite.gameHooks.Classes[mappedName] = minifiedClass;
+    //     return true;
+    // }
 
     registerClassInstance(sourceClass : string, mappedName : string) : boolean {
         const classInstance = document.client.get(sourceClass);
