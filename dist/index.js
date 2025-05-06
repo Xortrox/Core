@@ -136,6 +136,9 @@ class RememberMe extends Plugin {
     this.warn("Stop Reached");
     return;
   }
+  async Rk__update(tickTime, self) {
+    this.warn("RememberMe sees tick");
+  }
 }
 
 // src/index.ts

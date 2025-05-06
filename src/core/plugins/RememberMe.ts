@@ -15,5 +15,9 @@ export class RememberMe extends Plugin {
         this.warn("Stop Reached");
         return;
     }
+
+    async Rk__update(tickTime : number, self : Object): Promise<void> {
+        this.warn("RememberMe sees tick");
+    }
     
 }
