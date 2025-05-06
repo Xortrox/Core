@@ -66,7 +66,7 @@ export class Highlite {
         (function (originalFunction : any) {
             listenerClassObject["invoke"] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
-                console.warn(args)
+                console.warn(`Invoke ${args}`);
                 return returnValue;
             }
         }(listenerClassObject["invoke"]));

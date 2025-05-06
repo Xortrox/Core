@@ -82,7 +82,7 @@ class Highlite {
     (function(originalFunction) {
       listenerClassObject["invoke"] = function(...args) {
         const returnValue = originalFunction.apply(this, arguments);
-        console.warn(args);
+        console.warn(`Invoke ${args}`);
         return returnValue;
       };
     })(listenerClassObject["invoke"]);
