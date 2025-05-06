@@ -40,6 +40,19 @@ class Highlite {
     document.highlite.gameHooks.Instances = {};
     document.highlite.gameHooks.Functions = {};
     this.registerClassInstance("mk", "EntityManager");
+    this.registerClassInstance("hN", "GroundItemManager");
+    this.registerClassInstance("oF", "MeshManager");
+    this.registerClassInstance("_F", "WorldMapManager");
+    this.registerClassInstance("GR", "AtmosphereManager");
+    this.registerClassInstance("sD", "WorldEntityManager");
+    this.registerClassInstance("_z", "SpellManager");
+    this.registerClassInstance("Ak", "SpellMeshManager");
+    this.registerClassInstance("Rk", "GameLoop");
+    this.registerClassInstance("zV", "ChatManager");
+    this.registerClassInstance("gz", "RangeManager");
+    this.registerClassInstance("Dz", "SocketManager");
+    this.registerClassInstance("Nz", "ItemManager");
+    this.registerClassInstance("kz", "GameEngine");
   }
   start() {
     console.log("Highlite Core Started!");
