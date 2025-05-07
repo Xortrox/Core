@@ -142,24 +142,6 @@ class Plugin {
   }
 }
 
-// src/core/plugins/RememberMe.ts
-class RememberMe extends Plugin {
-  pluginName = "RememberMe";
-  async init() {
-    this.warn("Init Reached");
-  }
-  async start() {
-    this.warn("Start Reached");
-  }
-  async stop() {
-    this.warn("Stop Reached");
-    return;
-  }
-  async GameLoop__update(tickTime, self) {
-    this.warn("RememberMe sees tick");
-  }
-}
-
 // src/core/plugins/VersionNotification.ts
 var pJSON = require_package();
 
@@ -182,6 +164,5 @@ class VersionNotification extends Plugin {
 
 // src/index.ts
 var highlite = new Highlite;
-highlite.pluginLoader.registerPlugin(RememberMe);
 highlite.pluginLoader.registerPlugin(VersionNotification);
 highlite.start();
