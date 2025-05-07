@@ -6,15 +6,14 @@ export class VersionNotification extends Plugin {
     pluginName: string = "VersionNotification";
 
     async init(): Promise<void> {
-    }
-
-    async Kz__handleFinishedLoading(...args) {
-        console.error("Made it");
-        const highspellLogo = document.getElementById("login-menu-logo") as HTMLDivElement;
-        const highliteVersion = document.createElement('div');
+        const highliteVersion = document.createElement('button');
+        highliteVersion.id = "login-screen-clear-game-cache-button highliteVersion";
+        highliteVersion.className = "login-screen-default-text-shadow";
         highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
-        highliteVersion.id = "login-menu-highlite-version";
-        highspellLogo.after(highliteVersion);
+        highliteVersion.style = "left 0; right: auto;";
+
+
+        document.appendChild(highliteVersion);
     }
     
     async start(): Promise<void> {

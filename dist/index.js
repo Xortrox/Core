@@ -112,20 +112,6 @@ class Highlite {
     })(classObject[fnName]);
     return true;
   }
-  registerInstanceFunctionListener(sourceClass, fnName, hookFn = this.hook) {
-    const self = this;
-    const classObject = document.client.get(sourceClass);
-    const hookName = `${sourceClass}_${fnName}`;
-    console.log("Hooking");
-    (function(originalFunction) {
-      classObject[fnName] = function(...args) {
-        const returnValue = originalFunction.apply(this, arguments);
-        hookFn.apply(self, [hookName, ...args, this]);
-        return returnValue;
-      };
-    })(classObject[fnName]);
-    return true;
-  }
   hook(fnName, ...args) {
     console.warn("fnName: " + fnName);
     for (const plugin of this.pluginLoader.plugins) {
@@ -162,14 +148,13 @@ var pJSON = require_package();
 
 class VersionNotification extends Plugin {
   pluginName = "VersionNotification";
-  async init() {}
-  async Kz__handleFinishedLoading(...args) {
-    console.error("Made it");
-    const highspellLogo = document.getElementById("login-menu-logo");
-    const highliteVersion = document.createElement("div");
+  async init() {
+    const highliteVersion = document.createElement("button");
+    highliteVersion.id = "login-screen-clear-game-cache-button highliteVersion";
+    highliteVersion.className = "login-screen-default-text-shadow";
     highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
-    highliteVersion.id = "login-menu-highlite-version";
-    highspellLogo.after(highliteVersion);
+    highliteVersion.style = "left 0; right: auto;";
+    document.appendChild(highliteVersion);
   }
   async start() {
     throw new Error("Method not implemented.");
