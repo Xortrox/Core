@@ -73,6 +73,7 @@ class Highlite {
     this.registerClassInstance("Nz", "ItemManager");
     this.registerClassInstance("kz", "GameEngine");
     this.registerClassFunctionListener("Rk", "_update");
+    this.registerClassFunctionListener("Kz", "_handleFinishedLoading");
   }
   start() {
     console.log("Highlite Core Started!");
@@ -147,18 +148,14 @@ var pJSON = require_package();
 
 class VersionNotification extends Plugin {
   pluginName = "VersionNotification";
-  async init() {
-    document.addEventListener("DOMContentLoaded", (event) => {
-      console.warn("DOM Loaded");
-      const highspellLogo = document.getElementById("login-menu-logo");
-      const highliteVersion = document.createElement("div");
-      highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
-      highliteVersion.id = "login-menu-highlite-version";
-      highspellLogo.after(highliteVersion);
-    });
-    window.addEventListener("load", (event) => {
-      console.warn("Window Full Loaded");
-    });
+  async init() {}
+  async Kz__handleFinishedLoading(...args) {
+    console.error("Made it");
+    const highspellLogo = document.getElementById("login-menu-logo");
+    const highliteVersion = document.createElement("div");
+    highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
+    highliteVersion.id = "login-menu-highlite-version";
+    highspellLogo.after(highliteVersion);
   }
   async start() {
     throw new Error("Method not implemented.");
