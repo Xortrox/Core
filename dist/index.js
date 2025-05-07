@@ -143,8 +143,35 @@ class Plugin {
   }
 }
 
-// src/core/plugins/VersionNotification.ts
+// src/core/plugins/HPAlert.ts
 var pJSON = require_package();
+
+class HPAlert extends Plugin {
+  pluginName = "HPAlert";
+  settings = {
+    volume: 5,
+    activationPercent: 25,
+    enabled: true
+  };
+  async init() {
+    const ctx = new AudioContext;
+    const osc = ctx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(440, ctx.currentTime);
+    osc.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 1);
+  }
+  async start() {
+    this.log("Started");
+  }
+  async stop() {
+    this.log("Stopped");
+  }
+}
+
+// src/core/plugins/VersionNotification.ts
+var pJSON2 = require_package();
 
 class VersionNotification extends Plugin {
   pluginName = "VersionNotification";
@@ -153,7 +180,7 @@ class VersionNotification extends Plugin {
     const highliteVersion = document.createElement("button");
     highliteVersion.id = "login-screen-clear-game-cache-button";
     highliteVersion.className = "login-screen-default-text-shadow";
-    highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
+    highliteVersion.innerText = `Highlite Version ${pJSON2.version}`;
     highliteVersion.style = "left 0; right: auto; margin:.75rem;";
   }
   async start() {
@@ -167,4 +194,5 @@ class VersionNotification extends Plugin {
 // src/index.ts
 var highlite = new Highlite;
 highlite.pluginLoader.registerPlugin(VersionNotification);
+highlite.pluginLoader.registerPlugin(HPAlert);
 highlite.start();
