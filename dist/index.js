@@ -157,10 +157,10 @@ class VersionNotification extends Plugin {
     document.getElementById("game-container").appendChild(highliteVersion);
   }
   async start() {
-    throw new Error("Method not implemented.");
+    this.log("Started");
   }
   async stop() {
-    throw new Error("Method not implemented.");
+    this.log("Stopped");
   }
 }
 

@@ -17,11 +17,11 @@ export class VersionNotification extends Plugin {
     }
     
     async start(): Promise<void> {
-        throw new Error("Method not implemented.");
+        this.log("Started")
     }
 
     async stop(): Promise<void> {
-        throw new Error("Method not implemented.");
+        this.log("Stopped")
     }
 
 }
