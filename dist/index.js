@@ -148,11 +148,13 @@ var pJSON = require_package();
 class VersionNotification extends Plugin {
   pluginName = "VersionNotification";
   async init() {
-    const highspellLogo = document.getElementById("login-menu-logo");
-    const highliteVersion = document.createElement("div");
-    highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
-    highliteVersion.id = "login-menu-highlite-version";
-    highspellLogo.after(highliteVersion);
+    window.addEventListener("load", (event) => {
+      const highspellLogo = document.getElementById("login-menu-logo");
+      const highliteVersion = document.createElement("div");
+      highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
+      highliteVersion.id = "login-menu-highlite-version";
+      highspellLogo.after(highliteVersion);
+    });
   }
   async start() {
     throw new Error("Method not implemented.");
