@@ -73,7 +73,7 @@ class Highlite {
     this.registerClassInstance("Nz", "ItemManager");
     this.registerClassInstance("kz", "GameEngine");
     this.registerClassFunctionListener("Rk", "_update");
-    this.registerClassFunctionListener("Kz", "_handleFinishedLoading");
+    this.registerInstanceFunctionListener("Kz", "_handleFinishedLoading");
   }
   start() {
     console.log("Highlite Core Started!");
@@ -101,6 +101,20 @@ class Highlite {
   registerClassFunctionListener(sourceClass, fnName, hookFn = this.hook) {
     const self = this;
     const classObject = document.client.get(sourceClass).prototype;
+    const hookName = `${sourceClass}_${fnName}`;
+    console.log("Hooking");
+    (function(originalFunction) {
+      classObject[fnName] = function(...args) {
+        const returnValue = originalFunction.apply(this, arguments);
+        hookFn.apply(self, [hookName, ...args, this]);
+        return returnValue;
+      };
+    })(classObject[fnName]);
+    return true;
+  }
+  registerInstanceFunctionListener(sourceClass, fnName, hookFn = this.hook) {
+    const self = this;
+    const classObject = document.client.get(sourceClass);
     const hookName = `${sourceClass}_${fnName}`;
     console.log("Hooking");
     (function(originalFunction) {
