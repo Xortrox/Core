@@ -16,7 +16,7 @@ export class RememberMe extends Plugin {
         return;
     }
 
-    async Rk__update(tickTime : number, self : Object): Promise<void> {
+    async GameLoop__update(tickTime : number, self : Object): Promise<void> {
         this.warn("RememberMe sees tick");
     }
     

@@ -1,3 +1,22 @@
+var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+
+// package.json
+var require_package = __commonJS((exports, module) => {
+  module.exports = {
+    name: "core",
+    module: "index.ts",
+    version: "0.0.1",
+    type: "module",
+    private: true,
+    devDependencies: {
+      "@types/bun": "latest"
+    },
+    peerDependencies: {
+      typescript: "^5"
+    }
+  };
+});
+
 // src/core/pluginLoader.ts
 class PluginLoader {
   plugins = [];
@@ -53,7 +72,7 @@ class Highlite {
     this.registerClassInstance("Dz", "SocketManager");
     this.registerClassInstance("Nz", "ItemManager");
     this.registerClassInstance("kz", "GameEngine");
-    this.registerClassFunctionListener("Rk", "_update");
+    this.registerClassFunctionListener("GameLoop", "_update");
   }
   start() {
     console.log("Highlite Core Started!");
@@ -136,12 +155,33 @@ class RememberMe extends Plugin {
     this.warn("Stop Reached");
     return;
   }
-  async Rk__update(tickTime, self) {
+  async GameLoop__update(tickTime, self) {
     this.warn("RememberMe sees tick");
+  }
+}
+
+// src/core/plugins/VersionNotification.ts
+var pJSON = require_package();
+
+class VersionNotification extends Plugin {
+  pluginName = "VersionNotification";
+  async init() {
+    const highspellLogo = document.getElementById("login-menu-logo");
+    const highliteVersion = document.createElement("div");
+    highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
+    highliteVersion.id = "login-menu-highlite-version";
+    highspellLogo.after(highliteVersion);
+  }
+  async start() {
+    throw new Error("Method not implemented.");
+  }
+  async stop() {
+    throw new Error("Method not implemented.");
   }
 }
 
 // src/index.ts
 var highlite = new Highlite;
 highlite.pluginLoader.registerPlugin(RememberMe);
+highlite.pluginLoader.registerPlugin(VersionNotification);
 highlite.start();

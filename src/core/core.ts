@@ -34,7 +34,7 @@ export class Highlite {
 
 
         // Function Hook-ins
-        this.registerClassFunctionListener("Rk", "_update");
+        this.registerClassFunctionListener("GameLoop", "_update");
     }
 
     start() {
