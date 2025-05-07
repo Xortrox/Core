@@ -149,24 +149,45 @@ var pJSON = require_package();
 class HPAlert extends Plugin {
   pluginName = "HPAlert";
   settings = {
-    volume: 5,
-    activationPercent: 25,
+    volume: 0.5,
+    activationPercent: 0.5,
     enabled: true
   };
   async init() {
-    const ctx = new AudioContext;
-    const osc = ctx.createOscillator();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(440, ctx.currentTime);
-    osc.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 1);
+    this.log("Initializing");
   }
   async start() {
     this.log("Started");
   }
   async stop() {
     this.log("Stopped");
+  }
+  async Rk__update(...args) {
+    const player = this.instanceHooks.EntityManager._mainPlayer;
+    if (player === undefined) {
+      return;
+    }
+    if (player._hitpoints == undefined) {
+      return;
+    }
+    if (player._hitpoints._currentLevel / player._hitpoints._level < 0.5) {
+      const ctx = new AudioContext;
+      const gain = ctx.createGain();
+      gain.gain.value = 0.1;
+      gain.connect(ctx.destination);
+      const osc1 = ctx.createOscillator();
+      osc1.type = "triangle";
+      osc1.frequency.setValueAtTime(440, ctx.currentTime);
+      osc1.connect(gain);
+      osc1.start(ctx.currentTime);
+      osc1.stop(ctx.currentTime + 0.2);
+      const osc2 = ctx.createOscillator();
+      osc2.type = "triangle";
+      osc2.frequency.setValueAtTime(440, ctx.currentTime + 0.25);
+      osc2.connect(gain);
+      osc2.start(ctx.currentTime + 0.25);
+      osc2.stop(ctx.currentTime + 0.45);
+    }
   }
 }
 

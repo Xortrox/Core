@@ -5,20 +5,13 @@ let pJSON = require('../../../package.json');
 export class HPAlert extends Plugin {
     pluginName: string = "HPAlert";
     settings = {
-        volume : 5,
-        activationPercent : 25,
+        volume : 0.5,
+        activationPercent : 0.5,
         enabled : true
     };
 
     async init(): Promise<void> {
-        // Create Audio Source
-        const ctx = new AudioContext();
-        const osc = ctx.createOscillator();
-        osc.type = 'sine';        // waveform: 'sine', 'square', 'sawtooth', 'triangle'
-        osc.frequency.setValueAtTime(440, ctx.currentTime); // A4 = 440Hz
-        osc.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 1); // play for 1 second
+        this.log("Initializing");
     }
     
     async start(): Promise<void> {
@@ -27,6 +20,42 @@ export class HPAlert extends Plugin {
 
     async stop(): Promise<void> {
         this.log("Stopped")
+    }
+
+
+    async Rk__update(...args : any) {
+        const player = this.instanceHooks.EntityManager._mainPlayer;
+
+        if (player === undefined) {
+            return;
+        }
+
+        if (player._hitpoints == undefined) {
+            return;
+        }
+
+        if ((player._hitpoints._currentLevel / player._hitpoints._level) < 0.5) {
+            const ctx = new AudioContext();
+            const gain = ctx.createGain();
+            gain.gain.value = 0.1;
+            gain.connect(ctx.destination);
+            
+            // First chirp
+            const osc1 = ctx.createOscillator();
+            osc1.type = 'triangle';
+            osc1.frequency.setValueAtTime(440, ctx.currentTime);
+            osc1.connect(gain);
+            osc1.start(ctx.currentTime);
+            osc1.stop(ctx.currentTime + 0.2); // Chirp for 0.2 seconds
+            
+            // Second chirp (starts after 0.25 seconds)
+            const osc2 = ctx.createOscillator();
+            osc2.type = 'triangle';
+            osc2.frequency.setValueAtTime(440, ctx.currentTime + 0.25);
+            osc2.connect(gain);
+            osc2.start(ctx.currentTime + 0.25);
+            osc2.stop(ctx.currentTime + 0.45); // Another 0.2-second chirp
+        }
     }
 
 }
