@@ -148,12 +148,16 @@ var pJSON = require_package();
 class VersionNotification extends Plugin {
   pluginName = "VersionNotification";
   async init() {
-    window.addEventListener("load", (event) => {
+    document.addEventListener("DOMContentLoaded", (event) => {
+      console.warn("DOM Loaded");
       const highspellLogo = document.getElementById("login-menu-logo");
       const highliteVersion = document.createElement("div");
       highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
       highliteVersion.id = "login-menu-highlite-version";
       highspellLogo.after(highliteVersion);
+    });
+    window.addEventListener("load", (event) => {
+      console.warn("Window Full Loaded");
     });
   }
   async start() {
