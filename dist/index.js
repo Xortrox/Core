@@ -150,10 +150,10 @@ class VersionNotification extends Plugin {
   pluginName = "VersionNotification";
   async init() {
     const highliteVersion = document.createElement("button");
-    highliteVersion.id = "login-screen-clear-game-cache-button highliteVersion";
+    highliteVersion.id = "login-screen-clear-game-cache-button";
     highliteVersion.className = "login-screen-default-text-shadow";
     highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
-    highliteVersion.style = "left 0; right: auto;";
+    highliteVersion.style = "left 0; right: auto; margin:.75rem;";
     document.getElementById("game-container").appendChild(highliteVersion);
   }
   async start() {
