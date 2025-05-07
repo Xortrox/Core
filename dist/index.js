@@ -148,19 +148,16 @@ var pJSON = require_package();
 
 class VersionNotification extends Plugin {
   pluginName = "VersionNotification";
-  alertAudio = null;
   settings = {};
   async init() {
-    const ctx = new AudioContext;
-    const osc = ctx.createOscillator();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(440, ctx.currentTime);
-    osc.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 1);
+    const highliteVersion = document.createElement("button");
+    highliteVersion.id = "login-screen-clear-game-cache-button";
+    highliteVersion.className = "login-screen-default-text-shadow";
+    highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
+    highliteVersion.style = "left 0; right: auto; margin:.75rem;";
   }
   async start() {
-    this.alertAudio?.play();
+    this.log("Started");
   }
   async stop() {
     this.log("Stopped");
