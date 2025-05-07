@@ -72,7 +72,7 @@ class Highlite {
     this.registerClassInstance("Dz", "SocketManager");
     this.registerClassInstance("Nz", "ItemManager");
     this.registerClassInstance("kz", "GameEngine");
-    this.registerClassFunctionListener("GameLoop", "_update");
+    this.registerClassFunctionListener("Rk", "_update");
   }
   start() {
     console.log("Highlite Core Started!");
