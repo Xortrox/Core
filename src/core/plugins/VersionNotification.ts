@@ -4,20 +4,16 @@ let pJSON = require('../../../package.json');
 
 export class VersionNotification extends Plugin {
     pluginName: string = "VersionNotification";
+    alertAudio: HTMLAudioElement | null = null;
+    settings = {};
 
     async init(): Promise<void> {
-        const highliteVersion = document.createElement('button');
-        highliteVersion.id = "login-screen-clear-game-cache-button";
-        highliteVersion.className = "login-screen-default-text-shadow";
-        highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
-        highliteVersion.style = "left 0; right: auto; margin:.75rem;";
-
-
-        document.getElementById('game-container').appendChild(highliteVersion);
+        // Create Audio Source
+        this.alertAudio = new Audio("https://cdn.pixabay.com/download/audio/2022/04/16/audio_f9313e5c93.mp3?filename=alert-109578.mp3");
     }
     
     async start(): Promise<void> {
-        this.log("Started")
+        this.alertAudio?.play();
     }
 
     async stop(): Promise<void> {

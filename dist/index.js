@@ -148,16 +148,13 @@ var pJSON = require_package();
 
 class VersionNotification extends Plugin {
   pluginName = "VersionNotification";
+  alertAudio = null;
+  settings = {};
   async init() {
-    const highliteVersion = document.createElement("button");
-    highliteVersion.id = "login-screen-clear-game-cache-button";
-    highliteVersion.className = "login-screen-default-text-shadow";
-    highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
-    highliteVersion.style = "left 0; right: auto; margin:.75rem;";
-    document.getElementById("game-container").appendChild(highliteVersion);
+    this.alertAudio = new Audio("https://cdn.pixabay.com/download/audio/2022/04/16/audio_f9313e5c93.mp3?filename=alert-109578.mp3");
   }
   async start() {
-    this.log("Started");
+    this.alertAudio?.play();
   }
   async stop() {
     this.log("Stopped");
