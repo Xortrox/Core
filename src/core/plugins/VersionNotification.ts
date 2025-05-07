@@ -13,7 +13,7 @@ export class VersionNotification extends Plugin {
         highliteVersion.style = "left 0; right: auto;";
 
 
-        document.appendChild(highliteVersion);
+        document.getElementById('game-container').appendChild(highliteVersion);
     }
     
     async start(): Promise<void> {
