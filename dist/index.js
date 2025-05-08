@@ -25,7 +25,7 @@ class PluginLoader {
   }
   registerPlugin(pluginClass) {
     const pluginInstance = new pluginClass;
-    console.log(`[Highlite] New plugin ${pluginInstance.pluginName} registered`);
+    console.info(`[Highlite] New plugin ${pluginInstance.pluginName} registered`);
     document.highlite[pluginInstance.pluginName] = pluginInstance;
     this.plugins.push(pluginInstance);
     return true;
@@ -146,16 +146,16 @@ class Highlite {
 class Plugin {
   gameHooks = document.highlite.gameHooks;
   log(...args) {
-    console.info(`[${this.pluginName}]`, ...args);
+    console.info(`[Highlite][${this.pluginName} Plugin]`, ...args);
   }
   info(...args) {
-    console.info(`[${this.pluginName}]`, ...args);
+    console.info(`[Highlite][${this.pluginName} Plugin]`, ...args);
   }
   warn(...args) {
-    console.warn(`[${this.pluginName}]`, ...args);
+    console.warn(`[Highlite][${this.pluginName} Plugin]`, ...args);
   }
   error(...args) {
-    console.error(`[${this.pluginName}]`, ...args);
+    console.error(`[Highlite][${this.pluginName} Plugin]`, ...args);
   }
 }
 

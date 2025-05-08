@@ -9,7 +9,7 @@ export class PluginLoader {
 
     registerPlugin<T extends Plugin>(pluginClass : new () => T) : boolean {
         const pluginInstance = new pluginClass();
-        console.log(`[Highlite] New plugin ${pluginInstance.pluginName} registered`);
+        console.info(`[Highlite] New plugin ${pluginInstance.pluginName} registered`);
 
         document.highlite[pluginInstance.pluginName] = pluginInstance
         this.plugins.push(pluginInstance);

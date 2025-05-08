@@ -14,18 +14,18 @@ export abstract class Plugin {
 
     // Log seems to be broken from loading HighSpell Client
     log(...args: any[]) : void {
-        console.info(`[${this.pluginName}]`, ...args);
+        console.info(`[Highlite][${this.pluginName} Plugin]`, ...args);
     }
 
     info(...args: any[]) : void {
-        console.info(`[${this.pluginName}]`, ...args);
+        console.info(`[Highlite][${this.pluginName} Plugin]`, ...args);
     }
 
     warn(...args: any[]) : void {
-        console.warn(`[${this.pluginName}]`, ...args);
+        console.warn(`[Highlite][${this.pluginName} Plugin]`, ...args);
     }
 
     error(...args: any[]) : void {
-        console.error(`[${this.pluginName}]`, ...args);
+        console.error(`[Highlite][${this.pluginName} Plugin]`, ...args);
     }
 }
