@@ -127,17 +127,17 @@ class Highlite {
 // src/core/interfaces/plugin.class.ts
 class Plugin {
   instanceHooks = document.highlite.gameHooks.Instances;
-  log(...args) {
-    console.info(`[${this.pluginName}]`, ...args);
+  async log(...args) {
+    await console.info(`[${this.pluginName}]`, ...args);
   }
-  info(...args) {
-    console.info(`[${this.pluginName}]`, ...args);
+  async info(...args) {
+    await console.info(`[${this.pluginName}]`, ...args);
   }
-  warn(...args) {
-    console.warn(`[${this.pluginName}]`, ...args);
+  async warn(...args) {
+    await console.warn(`[${this.pluginName}]`, ...args);
   }
-  error(...args) {
-    console.error(`[${this.pluginName}]`, ...args);
+  async error(...args) {
+    await console.error(`[${this.pluginName}]`, ...args);
   }
 }
 
