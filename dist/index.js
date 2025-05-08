@@ -173,7 +173,7 @@ class HPAlert extends Plugin {
   stop() {
     this.log("Stopped");
   }
-  Rk__update(...args) {
+  GameLoop_update(...args) {
     const player = this.instanceHooks.EntityManager._mainPlayer;
     if (player === undefined) {
       return;
@@ -218,13 +218,13 @@ class VersionNotification extends Plugin {
     this.highliteVersionElement.style = "left 0; right: auto; margin:.75rem;";
     document.getElementById("game-container")?.appendChild(this.highliteVersionElement);
   }
-  Dz__loggedIn(...args) {
+  SocketManager_loggedIn(...args) {
     if (!this.highliteVersionElement) {
       return;
     }
     this.highliteVersionElement.style.visibility = "hidden";
   }
-  Dz__handleLoggedOut(...args) {
+  SocketManager_handleLoggedOut(...args) {
     if (!this.highliteVersionElement) {
       return;
     }
