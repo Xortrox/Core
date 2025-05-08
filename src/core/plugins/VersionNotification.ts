@@ -4,24 +4,35 @@ let pJSON = require('../../../package.json');
 
 export class VersionNotification extends Plugin {
     pluginName: string = "VersionNotification";
+    highliteVersionElement : HTMLButtonElement | null = null;
+
     settings = {};
 
     init(): void {
         this.log('Initializing');
-        const highliteVersion = document.createElement('button');
-        highliteVersion.id = "login-screen-clear-game-cache-button";
-        highliteVersion.className = "login-screen-default-text-shadow";
-        highliteVersion.innerText = `Highlite Version ${pJSON.version}`;
-        highliteVersion.style = "left 0; right: auto; margin:.75rem;";
-        document.getElementById('game-container')?.appendChild(highliteVersion);
+        this.highliteVersionElement = document.createElement('button');
+        this.highliteVersionElement.id = "login-screen-clear-game-cache-button";
+        this.highliteVersionElement.className = "login-screen-default-text-shadow";
+        this.highliteVersionElement.innerText = `Highlite Version ${pJSON.version}`;
+        this.highliteVersionElement.style = "left 0; right: auto; margin:.75rem;";
+        
+        document.getElementById('game-container')?.appendChild(this.highliteVersionElement);
     }
 
     Dz__loggedIn(...args : any) {
-        this.log("Logged In");
+        if (!this.highliteVersionElement) {
+            return;
+        }
+
+        this.highliteVersionElement.style.visibility = 'hidden'
     }
 
     Dz__handleLoggedOut(...args : any) {
-        this.log("Logged Out");
+        if (!this.highliteVersionElement) {
+            return;
+        }
+        
+        this.highliteVersionElement.style.visibility = 'visible'
     }
     
     start(): void {

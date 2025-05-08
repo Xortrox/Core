@@ -23,27 +23,27 @@ class PluginLoader {
   constructor() {
     this.plugins = [];
   }
-  async registerPlugin(pluginClass) {
+  registerPlugin(pluginClass) {
     const pluginInstance = new pluginClass;
-    await pluginInstance.init();
+    pluginInstance.init();
     document.highlite[pluginInstance.pluginName] = pluginInstance;
     this.plugins.push(pluginInstance);
     return true;
   }
-  async startAll() {
+  startAll() {
     for (const plugin of this.plugins) {
-      await plugin.start();
+      plugin.start();
     }
   }
-  async stopAll() {
+  stopAll() {
     for (const plugin of this.plugins) {
-      await plugin.stop();
+      plugin.stop();
     }
   }
-  async postInitAll() {
+  postInitAll() {
     for (const plugin of this.plugins) {
       if (plugin.postInit) {
-        await plugin.postInit();
+        plugin.postInit();
       }
     }
   }
@@ -133,17 +133,17 @@ class Highlite {
 // src/core/interfaces/plugin.class.ts
 class Plugin {
   instanceHooks = document.highlite.gameHooks.Instances;
-  async log(...args) {
-    await console.info(`[${this.pluginName}]`, ...args);
+  log(...args) {
+    console.info(`[${this.pluginName}]`, ...args);
   }
-  async info(...args) {
-    await console.info(`[${this.pluginName}]`, ...args);
+  info(...args) {
+    console.info(`[${this.pluginName}]`, ...args);
   }
-  async warn(...args) {
-    await console.warn(`[${this.pluginName}]`, ...args);
+  warn(...args) {
+    console.warn(`[${this.pluginName}]`, ...args);
   }
-  async error(...args) {
-    await console.error(`[${this.pluginName}]`, ...args);
+  error(...args) {
+    console.error(`[${this.pluginName}]`, ...args);
   }
 }
 
@@ -157,16 +157,16 @@ class HPAlert extends Plugin {
     activationPercent: 0.5,
     enabled: true
   };
-  async init() {
+  init() {
     this.log("Initializing");
   }
-  async start() {
+  start() {
     this.log("Started");
   }
-  async stop() {
+  stop() {
     this.log("Stopped");
   }
-  async Rk__update(...args) {
+  Rk__update(...args) {
     const player = this.instanceHooks.EntityManager._mainPlayer;
     if (player === undefined) {
       return;
@@ -200,26 +200,33 @@ var pJSON2 = require_package();
 
 class VersionNotification extends Plugin {
   pluginName = "VersionNotification";
+  highliteVersionElement = null;
   settings = {};
-  async init() {
+  init() {
     this.log("Initializing");
-    const highliteVersion = document.createElement("button");
-    highliteVersion.id = "login-screen-clear-game-cache-button";
-    highliteVersion.className = "login-screen-default-text-shadow";
-    highliteVersion.innerText = `Highlite Version ${pJSON2.version}`;
-    highliteVersion.style = "left 0; right: auto; margin:.75rem;";
-    document.getElementById("game-container")?.appendChild(highliteVersion);
+    this.highliteVersionElement = document.createElement("button");
+    this.highliteVersionElement.id = "login-screen-clear-game-cache-button";
+    this.highliteVersionElement.className = "login-screen-default-text-shadow";
+    this.highliteVersionElement.innerText = `Highlite Version ${pJSON2.version}`;
+    this.highliteVersionElement.style = "left 0; right: auto; margin:.75rem;";
+    document.getElementById("game-container")?.appendChild(this.highliteVersionElement);
   }
-  async Dz__loggedIn(...args) {
-    this.log("Logged In");
+  Dz__loggedIn(...args) {
+    if (!this.highliteVersionElement) {
+      return;
+    }
+    this.highliteVersionElement.style.visibility = "hidden";
   }
-  async Dz__handleLoggedOut(...args) {
-    this.log("Logged Out");
+  Dz__handleLoggedOut(...args) {
+    if (!this.highliteVersionElement) {
+      return;
+    }
+    this.highliteVersionElement.style.visibility = "visible";
   }
-  async start() {
+  start() {
     this.log("Started");
   }
-  async stop() {
+  stop() {
     this.log("Stopped");
   }
 }
