@@ -210,10 +210,10 @@ class VersionNotification extends Plugin {
     highliteVersion.style = "left 0; right: auto; margin:.75rem;";
     document.getElementById("game-container")?.appendChild(highliteVersion);
   }
-  async Dk__loggedIn(...args) {
+  async Dz__loggedIn(...args) {
     this.log("Logged In");
   }
-  async Dk__handleLoggedOut(...args) {
+  async Dz__handleLoggedOut(...args) {
     this.log("Logged Out");
   }
   async start() {

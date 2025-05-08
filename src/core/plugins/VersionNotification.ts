@@ -16,11 +16,11 @@ export class VersionNotification extends Plugin {
         document.getElementById('game-container')?.appendChild(highliteVersion);
     }
 
-    async Dk__loggedIn(...args : any) {
+    async Dz__loggedIn(...args : any) {
         this.log("Logged In");
     }
 
-    async Dk__handleLoggedOut(...args : any) {
+    async Dz__handleLoggedOut(...args : any) {
         this.log("Logged Out");
     }
     
