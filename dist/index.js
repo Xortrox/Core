@@ -126,9 +126,6 @@ class Highlite {
 
 // src/core/interfaces/plugin.class.ts
 class Plugin {
-  constructor() {
-    this.log("Loaded");
-  }
   instanceHooks = document.highlite.gameHooks.Instances;
   log(...args) {
     console.info(`[${this.pluginName}]`, ...args);
@@ -199,6 +196,7 @@ class VersionNotification extends Plugin {
   pluginName = "VersionNotification";
   settings = {};
   async init() {
+    this.log("Initializing");
     const highliteVersion = document.createElement("button");
     highliteVersion.id = "login-screen-clear-game-cache-button";
     highliteVersion.className = "login-screen-default-text-shadow";

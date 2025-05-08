@@ -7,6 +7,7 @@ export class VersionNotification extends Plugin {
     settings = {};
 
     async init(): Promise<void> {
+        this.log('Initializing');
         const highliteVersion = document.createElement('button');
         highliteVersion.id = "login-screen-clear-game-cache-button";
         highliteVersion.className = "login-screen-default-text-shadow";

@@ -1,6 +1,4 @@
-import { listen } from "bun";
 import { PluginLoader } from "./pluginLoader";
-import { RememberMe } from "./plugins/RememberMe";
 
 export class Highlite {
     pluginLoader = new PluginLoader;
