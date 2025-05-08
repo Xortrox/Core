@@ -56,7 +56,7 @@ class Highlite {
     console.info("Highlite Core Initializing!");
     document.highlite = {};
     document.highlite.gameHooks = {};
-    document.highlite.gameHooks.Instances = {};
+    document.highlite.gameHooks.Classes = {};
     document.highlite.gameHooks.Listeners = {};
     this.registerClass("mk", "EntityManager");
     this.registerClass("hN", "GroundItemManager");

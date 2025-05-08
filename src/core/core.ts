@@ -8,7 +8,7 @@ export class Highlite {
 
         document.highlite = {};
         document.highlite.gameHooks = {};
-        document.highlite.gameHooks.Instances = {};
+        document.highlite.gameHooks.Classes = {};
         document.highlite.gameHooks.Listeners = {};
 
         // Listeners Hook-In
