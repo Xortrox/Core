@@ -32,18 +32,18 @@ class PluginLoader {
   }
   async startAll() {
     for (const plugin of this.plugins) {
-      plugin.start();
+      await plugin.start();
     }
   }
   async stopAll() {
     for (const plugin of this.plugins) {
-      plugin.stop();
+      await plugin.stop();
     }
   }
   async postInitAll() {
     for (const plugin of this.plugins) {
       if (plugin.postInit) {
-        plugin.postInit();
+        await plugin.postInit();
       }
     }
   }
