@@ -102,7 +102,6 @@ class Highlite {
     const self = this;
     const classObject = document.client.get(sourceClass).prototype;
     const hookName = `${sourceClass}_${fnName}`;
-    console.log("Hooking");
     (function(originalFunction) {
       classObject[fnName] = function(...args) {
         const returnValue = originalFunction.apply(this, arguments);
@@ -113,7 +112,6 @@ class Highlite {
     return true;
   }
   hook(fnName, ...args) {
-    console.warn("fnName: " + fnName);
     for (const plugin of this.pluginLoader.plugins) {
       if (typeof plugin[fnName] === "function") {
         try {
@@ -130,16 +128,16 @@ class Highlite {
 class Plugin {
   instanceHooks = document.highlite.gameHooks.Instances;
   log(...args) {
-    console.log(`[${this.pluginName}]`, args);
+    console.log(`[${this.pluginName}]`, ...args);
   }
   info(...args) {
-    console.info(`[${this.pluginName}]`, args);
+    console.info(`[${this.pluginName}]`, ...args);
   }
   warn(...args) {
-    console.warn(`[${this.pluginName}]`, args);
+    console.warn(`[${this.pluginName}]`, ...args);
   }
   error(...args) {
-    console.error(`[${this.pluginName}]`, args);
+    console.error(`[${this.pluginName}]`, ...args);
   }
 }
 

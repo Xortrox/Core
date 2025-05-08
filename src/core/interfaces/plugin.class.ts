@@ -12,18 +12,18 @@ export abstract class Plugin {
     instanceHooks = document.highlite.gameHooks.Instances;
 
     log(...args: any[]) : void {
-        console.log(`[${this.pluginName}]`, args);
+        console.log(`[${this.pluginName}]`, ...args);
     }
 
     info(...args: any[]) : void {
-        console.info(`[${this.pluginName}]`, args);
+        console.info(`[${this.pluginName}]`, ...args);
     }
 
     warn(...args: any[]) : void {
-        console.warn(`[${this.pluginName}]`, args);
+        console.warn(`[${this.pluginName}]`, ...args);
     }
 
     error(...args: any[]) : void {
-        console.error(`[${this.pluginName}]`, args);
+        console.error(`[${this.pluginName}]`, ...args);
     }
 }

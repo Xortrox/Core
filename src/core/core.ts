@@ -105,7 +105,6 @@ export class Highlite {
         const self = this;
         const classObject = document.client.get(sourceClass).prototype;
         const hookName = `${sourceClass}_${fnName}`;
-        console.log("Hooking");
         (function (originalFunction : any) {
             classObject[fnName] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
@@ -119,7 +118,6 @@ export class Highlite {
 
 
     hook(fnName : string, ...args : Array<unknown>) {
-        console.warn("fnName: " + fnName);
         for (const plugin of this.pluginLoader.plugins) {
             if (typeof plugin[fnName] === "function") {
                 try {
