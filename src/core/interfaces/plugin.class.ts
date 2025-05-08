@@ -1,5 +1,10 @@
 export abstract class Plugin {
     abstract pluginName : string;
+
+    constructor() {
+        this.log('Loaded');
+    }
+
     abstract init(): Promise<void>;
     abstract start(): Promise<void>;
     abstract stop(): Promise<void>;
