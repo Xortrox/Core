@@ -36,6 +36,16 @@ export class Highlite {
         this.registerClassFunctionListener("Dz", "_loggedIn");
         this.registerClassFunctionListener("Dz", "_handleLoggedOut");
         this.registerClassFunctionListener("Kz", "_handleFinishedLoading"); // Login Loading Finished | Currently a Race-Condition
+
+
+        /*
+         Post-Hooking, we tell HighSpell Client to start by re-running DOMContentLoaded
+         Highlite Loader removes the client so it does not get a chance to see this event before now.
+        */
+        document.dispatchEvent(new Event("DOMContentLoaded", {
+            bubbles: true,
+            cancelable: true
+        }));
     }
 
     start() {

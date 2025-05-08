@@ -76,6 +76,10 @@ class Highlite {
     this.registerClassFunctionListener("Dz", "_loggedIn");
     this.registerClassFunctionListener("Dz", "_handleLoggedOut");
     this.registerClassFunctionListener("Kz", "_handleFinishedLoading");
+    document.dispatchEvent(new Event("DOMContentLoaded", {
+      bubbles: true,
+      cancelable: true
+    }));
   }
   start() {
     console.info("Highlite Core Started!");
