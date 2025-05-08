@@ -73,6 +73,8 @@ class Highlite {
     this.registerClassInstance("Nz", "ItemManager");
     this.registerClassInstance("kz", "GameEngine");
     this.registerClassFunctionListener("Rk", "_update");
+    this.registerClassFunctionListener("Dz", "_loggedIn");
+    this.registerClassFunctionListener("Dz", "_handleLoggedOut");
     this.registerClassFunctionListener("Kz", "_handleFinishedLoading");
   }
   start() {
@@ -203,6 +205,12 @@ class VersionNotification extends Plugin {
     highliteVersion.innerText = `Highlite Version ${pJSON2.version}`;
     highliteVersion.style = "left 0; right: auto; margin:.75rem;";
     document.getElementById("game-container")?.appendChild(highliteVersion);
+  }
+  async Dk__loggedIn(...args) {
+    this.log("Logged In");
+  }
+  async Dk__handleLoggedOut(...args) {
+    this.log("Logged Out");
   }
   async start() {
     this.log("Started");

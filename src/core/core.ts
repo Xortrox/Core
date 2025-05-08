@@ -33,6 +33,8 @@ export class Highlite {
 
         // Function Hook-ins
         this.registerClassFunctionListener("Rk", "_update");
+        this.registerClassFunctionListener("Dz", "_loggedIn");
+        this.registerClassFunctionListener("Dz", "_handleLoggedOut");
         this.registerClassFunctionListener("Kz", "_handleFinishedLoading"); // Login Loading Finished | Currently a Race-Condition
     }
 
