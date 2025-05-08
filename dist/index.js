@@ -202,6 +202,7 @@ class VersionNotification extends Plugin {
     highliteVersion.className = "login-screen-default-text-shadow";
     highliteVersion.innerText = `Highlite Version ${pJSON2.version}`;
     highliteVersion.style = "left 0; right: auto; margin:.75rem;";
+    document.getElementById("game-container")?.appendChild(highliteVersion);
   }
   async start() {
     this.log("Started");
