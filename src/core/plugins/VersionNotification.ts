@@ -19,7 +19,7 @@ export class VersionNotification extends Plugin {
         document.getElementById('game-container')?.appendChild(this.highliteVersionElement);
     }
 
-    Dz__loggedIn(...args : any) {
+    SocketManager_loggedIn(...args : any) {
         if (!this.highliteVersionElement) {
             return;
         }
@@ -27,11 +27,11 @@ export class VersionNotification extends Plugin {
         this.highliteVersionElement.style.visibility = 'hidden'
     }
 
-    Dz__handleLoggedOut(...args : any) {
+    SocketManager_handleLoggedOut(...args : any) {
         if (!this.highliteVersionElement) {
             return;
         }
-        
+
         this.highliteVersionElement.style.visibility = 'visible'
     }
     

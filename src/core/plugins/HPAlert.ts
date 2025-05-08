@@ -23,7 +23,7 @@ export class HPAlert extends Plugin {
     }
 
 
-    Rk__update(...args : any) {
+    GameLoop_update(...args : any) {
         const player = this.instanceHooks.EntityManager._mainPlayer;
 
         if (player === undefined) {

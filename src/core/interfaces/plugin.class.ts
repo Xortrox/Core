@@ -10,7 +10,7 @@ export abstract class Plugin {
     
     postInit?(): void;
 
-    instanceHooks = document.highlite.gameHooks.Instances;
+    gameHooks = document.highlite.gameHooks
 
     // Log seems to be broken from loading HighSpell Client
     log(...args: any[]) : void {

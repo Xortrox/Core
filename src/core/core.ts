@@ -15,27 +15,26 @@ export class Highlite {
         // this.attachListeners("NI");
 
         // Instance Hook-ins
-        this.registerClassInstance("mk", "EntityManager");
-        this.registerClassInstance("hN", "GroundItemManager");
-        this.registerClassInstance("oF", "MeshManager");
-        this.registerClassInstance("_F", "WorldMapManager");
-        this.registerClassInstance("GR", "AtmosphereManager");
-        this.registerClassInstance("sD", "WorldEntityManager");
-        this.registerClassInstance("_z", "SpellManager")
-        this.registerClassInstance("Ak", "SpellMeshManager");
-        this.registerClassInstance("Rk", "GameLoop");
-        this.registerClassInstance("zV", "ChatManager");
-        this.registerClassInstance("gz", "RangeManager");
-        this.registerClassInstance("Dz", "SocketManager");
-        this.registerClassInstance("Nz", "ItemManager");
-        this.registerClassInstance("kz", "GameEngine");
+        this.registerClass("mk", "EntityManager");
+        this.registerClass("hN", "GroundItemManager");
+        this.registerClass("oF", "MeshManager");
+        this.registerClass("_F", "WorldMapManager");
+        this.registerClass("GR", "AtmosphereManager");
+        this.registerClass("sD", "WorldEntityManager");
+        this.registerClass("_z", "SpellManager")
+        this.registerClass("Ak", "SpellMeshManager");
+        this.registerClass("Rk", "GameLoop");
+        this.registerClass("zV", "ChatManager");
+        this.registerClass("gz", "RangeManager");
+        this.registerClass("Dz", "SocketManager");
+        this.registerClass("Nz", "ItemManager");
+        this.registerClass("kz", "GameEngine");
 
 
         // Function Hook-ins
-        this.registerClassFunctionListener("Rk", "_update");
-        this.registerClassFunctionListener("Dz", "_loggedIn");
-        this.registerClassFunctionListener("Dz", "_handleLoggedOut");
-        this.registerClassFunctionListener("Kz", "_handleFinishedLoading"); // Login Loading Finished | Currently a Race-Condition
+        this.registerClassHook("GameLoop", "_update");
+        this.registerClassHook("SocketManager", "_loggedIn");
+        this.registerClassHook("SocketManager", "_handleLoggedOut");
 
 
         /*
@@ -99,7 +98,7 @@ export class Highlite {
     //     return true;
     // }
 
-    registerClassInstance(sourceClass : string, mappedName : string) : boolean {
+    registerClass(sourceClass : string, mappedName : string) : boolean {
         const classInstance = document.client.get(sourceClass);
 
         if (!classInstance) {
@@ -107,14 +106,25 @@ export class Highlite {
             return false;
         }
 
-        document.highlite.gameHooks.Instances[mappedName] = classInstance.Instance;
+        document.highlite.gameHooks.Classes[mappedName] = classInstance.Instance;
         return true;
     }
 
-    registerClassFunctionListener(sourceClass : string, fnName : string, hookFn = this.hook) : boolean {
+    registerClassHook(sourceClass : string, fnName : string, hookFn = this.hook) : boolean {
         const self = this;
-        const classObject = document.client.get(sourceClass).prototype;
-        const hookName = `${sourceClass}_${fnName}`;
+        const classObject = document.highlite.gameHooks.Classes[sourceClass].prototype;
+
+        if (!classObject) {
+            console.warn(`Unknown Class ${sourceClass}`);
+        }
+
+        let functionName = fnName;
+        if (functionName.startsWith("_")) {
+            functionName = functionName.substring(1)
+        }
+
+        const hookName = `${sourceClass}_${functionName}`;
+        console.log(`Hook Added for ${hookName}`);
         (function (originalFunction : any) {
             classObject[fnName] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
