@@ -6,7 +6,7 @@ export class VersionNotification extends Plugin {
     pluginName: string = "VersionNotification";
     settings = {};
 
-    async init(): Promise<void> {
+    init(): void {
         this.log('Initializing');
         const highliteVersion = document.createElement('button');
         highliteVersion.id = "login-screen-clear-game-cache-button";
@@ -16,19 +16,19 @@ export class VersionNotification extends Plugin {
         document.getElementById('game-container')?.appendChild(highliteVersion);
     }
 
-    async Dz__loggedIn(...args : any) {
+    Dz__loggedIn(...args : any) {
         this.log("Logged In");
     }
 
-    async Dz__handleLoggedOut(...args : any) {
+    Dz__handleLoggedOut(...args : any) {
         this.log("Logged Out");
     }
     
-    async start(): Promise<void> {
+    start(): void {
         this.log("Started");
     }
 
-    async stop(): Promise<void> {
+    stop(): void {
         this.log("Stopped");
     }
 

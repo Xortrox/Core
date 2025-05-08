@@ -7,9 +7,9 @@ export class PluginLoader {
         this.plugins = [];
     }
 
-    async registerPlugin<T extends Plugin>(pluginClass : new () => T) : Promise<boolean> {
+    registerPlugin<T extends Plugin>(pluginClass : new () => T) : boolean {
         const pluginInstance = new pluginClass();
-        await pluginInstance.init();
+        pluginInstance.init();
 
         document.highlite[pluginInstance.pluginName] = pluginInstance
         this.plugins.push(pluginInstance);
@@ -17,22 +17,22 @@ export class PluginLoader {
         return true;
     }
 
-    async startAll() {
+    startAll() {
         for (const plugin of this.plugins) {
-            await plugin.start();
+            plugin.start();
         }
     }
 
-    async stopAll() {
+    stopAll() {
         for (const plugin of this.plugins) {
-            await plugin.stop();
+            plugin.stop();
         }
     }
 
-    async postInitAll() {
+    postInitAll() {
         for (const plugin of this.plugins) {
             if (plugin.postInit) {
-                await plugin.postInit();
+                plugin.postInit();
             }
         }
     }

@@ -10,20 +10,20 @@ export class HPAlert extends Plugin {
         enabled : true
     };
 
-    async init(): Promise<void> {
+    init(): void {
         this.log("Initializing");
     }
     
-    async start(): Promise<void> {
+    start(): void {
         this.log("Started")
     }
 
-    async stop(): Promise<void> {
+    stop(): void {
         this.log("Stopped")
     }
 
 
-    async Rk__update(...args : any) {
+    Rk__update(...args : any) {
         const player = this.instanceHooks.EntityManager._mainPlayer;
 
         if (player === undefined) {
