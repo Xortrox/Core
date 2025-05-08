@@ -16,8 +16,9 @@ export abstract class Plugin {
 
     instanceHooks = document.highlite.gameHooks.Instances;
 
+    // Log seems to be broken from loading HighSpell Client
     log(...args: any[]) : void {
-        console.log(`[${this.pluginName}]`, ...args);
+        console.info(`[${this.pluginName}]`, ...args);
     }
 
     info(...args: any[]) : void {

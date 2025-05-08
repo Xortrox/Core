@@ -6,7 +6,7 @@ export class Highlite {
     pluginLoader = new PluginLoader;
 
     constructor() {
-        console.log("Highlite Core Initializing!");
+        console.info("Highlite Core Initializing!");
 
         document.highlite = {};
         document.highlite.gameHooks = {};
@@ -39,18 +39,18 @@ export class Highlite {
     }
 
     start() {
-        console.log("Highlite Core Started!");
+        console.info("Highlite Core Started!");
         this.pluginLoader.postInitAll();
         this.pluginLoader.startAll();
     }
 
     stop() {
-        console.log("Highlite Core Stopped!");
+        console.info("Highlite Core Stopped!");
         this.pluginLoader.stopAll();
     }
 
     reload() {
-        console.log("Highlite Core Reloading");
+        console.info("Highlite Core Reloading");
         this.stop();
         this.start();
     }
@@ -93,7 +93,7 @@ export class Highlite {
         const classInstance = document.client.get(sourceClass);
 
         if (!classInstance) {
-            console.log(`${sourceClass} (${mappedName}) is not defined.`);
+            console.warn(`${sourceClass} (${mappedName}) is not defined.`);
             return false;
         }
 

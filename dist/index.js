@@ -53,7 +53,7 @@ class PluginLoader {
 class Highlite {
   pluginLoader = new PluginLoader;
   constructor() {
-    console.log("Highlite Core Initializing!");
+    console.info("Highlite Core Initializing!");
     document.highlite = {};
     document.highlite.gameHooks = {};
     document.highlite.gameHooks.Instances = {};
@@ -76,23 +76,23 @@ class Highlite {
     this.registerClassFunctionListener("Kz", "_handleFinishedLoading");
   }
   start() {
-    console.log("Highlite Core Started!");
+    console.info("Highlite Core Started!");
     this.pluginLoader.postInitAll();
     this.pluginLoader.startAll();
   }
   stop() {
-    console.log("Highlite Core Stopped!");
+    console.info("Highlite Core Stopped!");
     this.pluginLoader.stopAll();
   }
   reload() {
-    console.log("Highlite Core Reloading");
+    console.info("Highlite Core Reloading");
     this.stop();
     this.start();
   }
   registerClassInstance(sourceClass, mappedName) {
     const classInstance = document.client.get(sourceClass);
     if (!classInstance) {
-      console.log(`${sourceClass} (${mappedName}) is not defined.`);
+      console.warn(`${sourceClass} (${mappedName}) is not defined.`);
       return false;
     }
     document.highlite.gameHooks.Instances[mappedName] = classInstance.Instance;
@@ -131,7 +131,7 @@ class Plugin {
   }
   instanceHooks = document.highlite.gameHooks.Instances;
   log(...args) {
-    console.log(`[${this.pluginName}]`, ...args);
+    console.info(`[${this.pluginName}]`, ...args);
   }
   info(...args) {
     console.info(`[${this.pluginName}]`, ...args);
