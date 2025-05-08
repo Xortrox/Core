@@ -100,7 +100,7 @@ class Highlite {
       console.warn(`${sourceClass} (${mappedName}) is not defined.`);
       return false;
     }
-    document.highlite.gameHooks.Classes[mappedName] = classInstance.Instance;
+    document.highlite.gameHooks.Classes[mappedName] = classInstance;
     return true;
   }
   registerClassHook(sourceClass, fnName, hookFn = this.hook) {
@@ -114,7 +114,6 @@ class Highlite {
       functionName = functionName.substring(1);
     }
     const hookName = `${sourceClass}_${functionName}`;
-    console.log(`Hook Added for ${hookName}`);
     (function(originalFunction) {
       classObject[fnName] = function(...args) {
         const returnValue = originalFunction.apply(this, arguments);
@@ -130,7 +129,7 @@ class Highlite {
         try {
           plugin[fnName].apply(plugin, args);
         } catch (e) {
-          console.error("Hooking Failed");
+          console.error(`[${plugin.pluginName}] Error with Hook ${fnName}: ${e}`);
         }
       }
     }
@@ -174,7 +173,7 @@ class HPAlert extends Plugin {
     this.log("Stopped");
   }
   GameLoop_update(...args) {
-    const player = this.instanceHooks.EntityManager._mainPlayer;
+    const player = this.gameHooks.Classes.EntityManager.Instance._mainPlayer;
     if (player === undefined) {
       return;
     }

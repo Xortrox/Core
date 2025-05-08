@@ -24,7 +24,7 @@ export class HPAlert extends Plugin {
 
 
     GameLoop_update(...args : any) {
-        const player = this.instanceHooks.EntityManager._mainPlayer;
+        const player = this.gameHooks.Classes.EntityManager.Instance._mainPlayer;
 
         if (player === undefined) {
             return;

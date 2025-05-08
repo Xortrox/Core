@@ -106,7 +106,7 @@ export class Highlite {
             return false;
         }
 
-        document.highlite.gameHooks.Classes[mappedName] = classInstance.Instance;
+        document.highlite.gameHooks.Classes[mappedName] = classInstance;
         return true;
     }
 
@@ -124,7 +124,6 @@ export class Highlite {
         }
 
         const hookName = `${sourceClass}_${functionName}`;
-        console.log(`Hook Added for ${hookName}`);
         (function (originalFunction : any) {
             classObject[fnName] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
@@ -143,7 +142,7 @@ export class Highlite {
                 try {
                     plugin[fnName].apply(plugin, args);
                 } catch (e) {
-                    console.error("Hooking Failed");
+                    console.error(`[${plugin.pluginName}] Error with Hook ${fnName}: ${e}`);
                 }
             }
         }
