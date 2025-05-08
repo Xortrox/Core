@@ -25,7 +25,7 @@ class PluginLoader {
   }
   registerPlugin(pluginClass) {
     const pluginInstance = new pluginClass;
-    pluginInstance.init();
+    console.log(`[Highlite] New plugin ${pluginInstance.pluginName} registered`);
     document.highlite[pluginInstance.pluginName] = pluginInstance;
     this.plugins.push(pluginInstance);
     return true;
@@ -38,6 +38,11 @@ class PluginLoader {
   stopAll() {
     for (const plugin of this.plugins) {
       plugin.stop();
+    }
+  }
+  initAll() {
+    for (const plugin of this.plugins) {
+      plugin.init();
     }
   }
   postInitAll() {
@@ -53,7 +58,7 @@ class PluginLoader {
 class Highlite {
   pluginLoader = new PluginLoader;
   constructor() {
-    console.info("Highlite Core Initializing!");
+    console.info("[Highlite] Core Initializing!");
     document.highlite = {};
     document.highlite.gameHooks = {};
     document.highlite.gameHooks.Classes = {};
@@ -81,23 +86,24 @@ class Highlite {
     }));
   }
   start() {
-    console.info("Highlite Core Started!");
+    console.info("[Highlite] Core Started!");
+    this.pluginLoader.initAll();
     this.pluginLoader.postInitAll();
     this.pluginLoader.startAll();
   }
   stop() {
-    console.info("Highlite Core Stopped!");
+    console.info("[Highlite] Core Stopped!");
     this.pluginLoader.stopAll();
   }
   reload() {
-    console.info("Highlite Core Reloading");
+    console.info("[Highlite] Core Reloading");
     this.stop();
     this.start();
   }
   registerClass(sourceClass, mappedName) {
     const classInstance = document.client.get(sourceClass);
     if (!classInstance) {
-      console.warn(`${sourceClass} (${mappedName}) is not defined.`);
+      console.warn(`[Highlite] ${sourceClass} (${mappedName}) is not defined in client.`);
       return false;
     }
     document.highlite.gameHooks.Classes[mappedName] = classInstance;
@@ -107,7 +113,7 @@ class Highlite {
     const self = this;
     const classObject = document.highlite.gameHooks.Classes[sourceClass].prototype;
     if (!classObject) {
-      console.warn(`Unknown Class ${sourceClass}`);
+      console.warn(`[Highlite] Attempted to register unknown client class hook (${sourceClass}).`);
     }
     let functionName = fnName;
     if (functionName.startsWith("_")) {

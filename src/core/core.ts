@@ -4,7 +4,7 @@ export class Highlite {
     pluginLoader = new PluginLoader;
 
     constructor() {
-        console.info("Highlite Core Initializing!");
+        console.info("[Highlite] Core Initializing!");
 
         document.highlite = {};
         document.highlite.gameHooks = {};
@@ -48,18 +48,19 @@ export class Highlite {
     }
 
     start() {
-        console.info("Highlite Core Started!");
+        console.info("[Highlite] Core Started!");
+        this.pluginLoader.initAll();
         this.pluginLoader.postInitAll();
         this.pluginLoader.startAll();
     }
 
     stop() {
-        console.info("Highlite Core Stopped!");
+        console.info("[Highlite] Core Stopped!");
         this.pluginLoader.stopAll();
     }
 
     reload() {
-        console.info("Highlite Core Reloading");
+        console.info("[Highlite] Core Reloading");
         this.stop();
         this.start();
     }
@@ -68,7 +69,7 @@ export class Highlite {
         const classInstance = document.client.get(sourceClass);
 
         if (!classInstance) {
-            console.warn(`${sourceClass} (${mappedName}) is not defined.`);
+            console.warn(`[Highlite] ${sourceClass} (${mappedName}) is not defined in client.`);
             return false;
         }
 
@@ -81,7 +82,7 @@ export class Highlite {
         const classObject = document.highlite.gameHooks.Classes[sourceClass].prototype;
 
         if (!classObject) {
-            console.warn(`Unknown Class ${sourceClass}`);
+            console.warn(`[Highlite] Attempted to register unknown client class hook (${sourceClass}).`);
         }
 
         let functionName = fnName;
