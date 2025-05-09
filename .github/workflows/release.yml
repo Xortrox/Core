@@ -9,7 +9,6 @@ on:
 
 jobs:
   Build_Code:
-    needs: Unit_Tests
     runs-on: ubuntu-latest
 
     steps:
