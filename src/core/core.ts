@@ -29,12 +29,14 @@ export class Highlite {
         this.registerClass("Dz", "SocketManager");
         this.registerClass("Nz", "ItemManager");
         this.registerClass("kz", "GameEngine");
+        this.registerClass("LF", "MainPlayer");
 
 
         // Function Hook-ins
         this.registerClassHook("GameLoop", "_update");
         this.registerClassHook("SocketManager", "_loggedIn");
         this.registerClassHook("SocketManager", "_handleLoggedOut");
+        this.registerClassHook("SocketManager", "_handleEnteredIdleStateAction");
 
 
         /*
