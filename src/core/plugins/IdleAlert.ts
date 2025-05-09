@@ -4,8 +4,9 @@ import { ActionState } from "../interfaces/game/states";
 export class IdleAlert extends Plugin {
     pluginName: string = "IdleAlert";
     settings: {} = {};
-
-    actionState : number = 0;
+    initialState : ActionState = ActionState.BankingState // For some reason this is the initial state
+    haveLeftInitial : boolean = false;
+    actionState : number = ActionState.IdleState;
     idleTicks : number = 0;
     shouldTick : boolean = false;
 
@@ -24,6 +25,14 @@ export class IdleAlert extends Plugin {
 
         if (player === undefined) {
             return;
+        }
+
+        if (player._currentState.getCurrentState() == this.initialState && !this.haveLeftInitial) {
+            return;
+        }
+
+        if (!this.haveLeftInitial) {
+            this.haveLeftInitial = true;
         }
 
         // If player moves we stop tracking ticks since they are no longer during an "AFK" action.
