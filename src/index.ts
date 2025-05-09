@@ -3,7 +3,25 @@ import { HPAlert } from "./core/plugins/HPAlert";
 import { VersionNotification } from "./core/plugins/VersionNotification";
 
 // This instance self-inserts itself into document.highlite
-const highlite = new Highlite();
-highlite.pluginLoader.registerPlugin(VersionNotification);
-highlite.pluginLoader.registerPlugin(HPAlert);
-highlite.start();
+
+
+// If in development mode, set a documnet variable to allow manual access to startHighlite() function, otherwise just run startHighlite()
+if (process.env.NODE_ENV === 'development') {
+    document.startHighlite = startHighlite;
+}
+// If in production mode, just run startHighlite()
+else {
+    startHighlite();
+}
+
+
+function startHighlite() {
+    // Initialize the Highlite instance
+    const highlite = new Highlite();
+
+    highlite.pluginLoader.registerPlugin(VersionNotification);
+    highlite.pluginLoader.registerPlugin(HPAlert);  
+
+    // Start the highlite instance
+    highlite.start();
+}
