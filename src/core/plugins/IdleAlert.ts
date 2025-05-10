@@ -77,7 +77,7 @@ export class IdleAlert extends Plugin {
             osc2.start(ctx.currentTime + 0.25);
             osc2.stop(ctx.currentTime + 0.45); // Another 0.2-second chirp
 
-            alert("Player is idle.");
+            // alert("Player is idle.");
             this.actionState = 0;
             this.idleTicks = 0;
         }
