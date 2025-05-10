@@ -37,6 +37,9 @@ export class Highlite {
         this.registerClassHook("SocketManager", "_loggedIn");
         this.registerClassHook("SocketManager", "_handleLoggedOut");
         this.registerClassHook("SocketManager", "_handleEnteredIdleStateAction");
+        this.registerClassHook("EntityManager", "addOtherPlayer");
+        this.registerStaticClassHook('eG', 'handleTargetAction');
+
 
 
         /*
@@ -85,6 +88,33 @@ export class Highlite {
 
         if (!classObject) {
             console.warn(`[Highlite] Attempted to register unknown client class hook (${sourceClass}).`);
+        }
+
+        let functionName = fnName;
+        if (functionName.startsWith("_")) {
+            functionName = functionName.substring(1)
+        }
+
+        const hookName = `${sourceClass}_${functionName}`;
+        (function (originalFunction : any) {
+            classObject[fnName] = function (...args : Array<unknown>) {
+                const returnValue = originalFunction.apply(this, arguments);
+                hookFn.apply(self, [hookName, ...args, this]);
+                return returnValue;
+            }
+        }(classObject[fnName]));
+
+        return true;
+    }
+
+
+
+    registerStaticClassHook(sourceClass : string, fnName : string, hookFn = this.hook) : boolean {
+        const self = this;
+        const classObject = document.client.get(sourceClass);
+
+        if (!classObject) {
+            console.warn(`[Highlite] Attempted to register unknown static client class hook (${sourceClass}).`);
         }
 
         let functionName = fnName;
