@@ -31,6 +31,10 @@ export class Highlite {
         this.registerClass("kz", "GameEngine");
         this.registerClass("LF", "MainPlayer");
 
+        // Needs Naming
+        this.registerClass("AF", "AF");
+        this.registerClass("aG", "aG")
+
 
         // Function Hook-ins
         this.registerClassHook("GameLoop", "_update");
@@ -38,7 +42,13 @@ export class Highlite {
         this.registerClassHook("SocketManager", "_handleLoggedOut");
         this.registerClassHook("SocketManager", "_handleEnteredIdleStateAction");
         this.registerClassHook("EntityManager", "addOtherPlayer");
+
+        // Needs Naming
+        this.registerClassHook("AF", "addItemToInventory");
         this.registerStaticClassHook('eG', 'handleTargetAction');
+        this.registerClassHook("ItemManager", "invokeInventoryAction");
+
+        
 
 
 

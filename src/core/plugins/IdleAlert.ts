@@ -20,6 +20,15 @@ export class IdleAlert extends Plugin {
         this.log("Stopped");
     }
 
+    SocketManager_handleLoggedOut(...args : any) {
+    if (!this.highliteVersionElement) {
+        return;
+    }
+
+    this.highliteVersionElement.style.visibility = 'visible'
+    }
+    
+
     GameLoop_update(...args : any) {
         const player = this.gameHooks.Classes.EntityManager.Instance._mainPlayer;
 
@@ -27,7 +36,7 @@ export class IdleAlert extends Plugin {
             return;
         }
 
-        if (player._currentState.getCurrentState() == this.ignoredStates) {
+        if (this.ignoredStates.includes(player._currentState.getCurrentState())) {
             return;
         }
 
