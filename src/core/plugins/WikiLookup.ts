@@ -1,14 +1,17 @@
-import { AddInventoryItemAction } from "../helpers/ContextMenuHelpers";
+import { AddEntityAction, AddInventoryItemAction } from "../helpers/ContextMenuHelpers";
 import { Plugin } from "../interfaces/plugin.class";
 
 export class WikiLookup extends Plugin {
     pluginName: string = "WikiLookup";
     settings: { [key: string]: string | number | boolean; } = {};
-    lookupContextAction : number = 0;
+    lookupContextActionInventory : number = 0;
+    lookupContextActionEntities : number = 0;
 
     init(): void {
         this.log("Initializing");
-        this.lookupContextAction = AddInventoryItemAction("Lookup");
+        this.lookupContextActionInventory = AddInventoryItemAction("Lookup");
+        this.lookupContextActionEntities = AddEntityAction("Lookup");
+
     }
     start(): void {
         this.log("Started")
@@ -18,13 +21,13 @@ export class WikiLookup extends Plugin {
     }
 
     AF_addItemToInventory(slot : number, total_slots : number, unknown : number, unknown2 : boolean, unkown3: any, AF : any) {
-        if (!AF._items[slot]._def._inventoryActions.includes(this.lookupContextAction)) {
-            AF._items[slot]._def._inventoryActions.push(this.lookupContextAction);
+        if (!AF._items[slot]._def._inventoryActions.includes(this.lookupContextActionInventory)) {
+            AF._items[slot]._def._inventoryActions.push(this.lookupContextActionInventory);
         }
     }
 
     ItemManager_invokeInventoryAction(unknown1: number, actionNumber: number, slotNumber: number, item : any) {
-        if (actionNumber == this.lookupContextAction) {
+        if (actionNumber == this.lookupContextActionInventory) {
             window.open(`https://highspell.wiki/w/${(item.Def._nameCapitalized).replace(" ", "_")}`);
         }
     }

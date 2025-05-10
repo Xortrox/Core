@@ -1,5 +1,10 @@
 export function AddEntityAction(actionName : string) : number {
     const ContextMenuActions = document.client.get('VA');
+    
+    if (ContextMenuActions[actionName] !== undefined) {
+        return ContextMenuActions[actionName];
+    }
+
     ContextMenuActions[ContextMenuActions[actionName] = (Object.keys(ContextMenuActions).length) / 2] = actionName;
 
     // Returns Entity Action Number;
