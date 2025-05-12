@@ -1,5 +1,5 @@
 import { Plugin } from "../interfaces/plugin.class";
-import { ActionState } from "../interfaces/game/states";
+import { ActionState } from "../interfaces/game/actionStates.enum.ts";
 
 export class IdleAlert extends Plugin {
     pluginName: string = "IdleAlert";

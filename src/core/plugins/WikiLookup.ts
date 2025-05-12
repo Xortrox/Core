@@ -1,5 +1,7 @@
 import { AddEntityAction, AddInventoryItemAction } from "../helpers/ContextMenuHelpers";
 import { Plugin } from "../interfaces/plugin.class";
+import { ActionState } from "../interfaces/game/actionStates.enum";
+import { ContextMenuTypes } from "../interfaces/game/contextMenuTypes.enum";
 
 export class WikiLookup extends Plugin {
     pluginName: string = "WikiLookup";
@@ -9,26 +11,22 @@ export class WikiLookup extends Plugin {
 
     init(): void {
         this.log("Initializing");
-        this.lookupContextActionInventory = AddInventoryItemAction("Lookup");
-        this.lookupContextActionEntities = AddEntityAction("Lookup");
+        // this.lookupContextActionInventory = AddInventoryItemAction("Lookup");
+        // this.lookupContextActionEntities = AddEntityAction("Lookup");
 
+        document.highlite.Helpers.ContextMenu.AddInventoryItemMenuAction("Lookup", this.handleInventoryAction, ActionState.Any, ContextMenuTypes.Any);
     }
+
+    handleInventoryAction(actionInfo : any, clickInfo : any) : any {
+        let item = actionInfo.getItem();
+        window.open(`https://highspell.wiki/w/${(item.Def._nameCapitalized).replace(" ", "_")}`);
+    }
+
     start(): void {
         this.log("Started")
     }
+
     stop(): void {
         this.log("Stopped");
-    }
-
-    AF_addItemToInventory(slot : number, total_slots : number, unknown : number, unknown2 : boolean, unkown3: any, AF : any) {
-        if (!AF._items[slot]._def._inventoryActions.includes(this.lookupContextActionInventory)) {
-            AF._items[slot]._def._inventoryActions.push(this.lookupContextActionInventory);
-        }
-    }
-
-    ItemManager_invokeInventoryAction(unknown1: number, actionNumber: number, slotNumber: number, item : any) {
-        if (actionNumber == this.lookupContextActionInventory) {
-            window.open(`https://highspell.wiki/w/${(item.Def._nameCapitalized).replace(" ", "_")}`);
-        }
     }
 }

@@ -1,12 +1,16 @@
+import { ContextMenuHelper } from "./helpers/ContextMenuHelpers";
 import { PluginLoader } from "./pluginLoader";
 
 export class Highlite {
     pluginLoader = new PluginLoader;
+    contextMenuHelper = new ContextMenuHelper;
 
     constructor() {
         console.info("[Highlite] Core Initializing!");
 
         document.highlite = {};
+        document.highlite.Helpers = {};
+        document.highlite.Helpers.ContextMenu = this.contextMenuHelper;
         document.highlite.gameHooks = {};
         document.highlite.gameHooks.Classes = {};
         document.highlite.gameHooks.Listeners = {};
@@ -15,20 +19,20 @@ export class Highlite {
         // this.attachListeners("NI");
 
         // Instance Hook-ins
-        this.registerClass("mk", "EntityManager");
+        this.registerClass("Ck", "EntityManager");
         this.registerClass("hN", "GroundItemManager");
         this.registerClass("oF", "MeshManager");
         this.registerClass("_F", "WorldMapManager");
         this.registerClass("GR", "AtmosphereManager");
         this.registerClass("sD", "WorldEntityManager");
-        this.registerClass("_z", "SpellManager")
-        this.registerClass("Ak", "SpellMeshManager");
-        this.registerClass("Rk", "GameLoop");
-        this.registerClass("zV", "ChatManager");
-        this.registerClass("gz", "RangeManager");
-        this.registerClass("Dz", "SocketManager");
-        this.registerClass("Nz", "ItemManager");
-        this.registerClass("kz", "GameEngine");
+        this.registerClass("Iz", "SpellManager")
+        this.registerClass("Dk", "SpellMeshManager");
+        this.registerClass("wk", "GameLoop");
+        this.registerClass("$V", "ChatManager");
+        this.registerClass("Pz", "RangeManager");
+        this.registerClass("zz", "SocketManager");
+        this.registerClass("qz", "ItemManager");
+        this.registerClass("$z", "GameEngine");
         this.registerClass("LF", "MainPlayer");
 
         // Needs Naming
@@ -45,13 +49,11 @@ export class Highlite {
 
         // Needs Naming
         this.registerClassHook("AF", "addItemToInventory");
-        this.registerStaticClassHook('eG', 'handleTargetAction');
+        this.contextMenuHelper.registerContextHook("vG", "_createInventoryItemContextMenuItems", this.contextMenuHelper.inventoryContextHook);
+        this.registerStaticClassHook('dG', 'handleTargetAction');
         this.registerClassHook("ItemManager", "invokeInventoryAction");
 
         
-
-
-
         /*
          Post-Hooking, we tell HighSpell Client to start by re-running DOMContentLoaded
          Highlite Loader removes the client so it does not get a chance to see this event before now.
@@ -108,16 +110,15 @@ export class Highlite {
         const hookName = `${sourceClass}_${functionName}`;
         (function (originalFunction : any) {
             classObject[fnName] = function (...args : Array<unknown>) {
-                const returnValue = originalFunction.apply(this, arguments);
+                const originalReturn = originalFunction.apply(this, arguments);
                 hookFn.apply(self, [hookName, ...args, this]);
-                return returnValue;
+                
+                return originalReturn;
             }
         }(classObject[fnName]));
 
         return true;
     }
-
-
 
     registerStaticClassHook(sourceClass : string, fnName : string, hookFn = this.hook) : boolean {
         const self = this;

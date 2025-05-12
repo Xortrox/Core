@@ -8,7 +8,7 @@ export class PlayerLookup extends Plugin {
 
     init(): void {
         this.log("Initializing");
-        this.lookupContextAction = AddEntityAction('Lookup');
+       //  this.lookupContextAction = AddEntityAction('Lookup');
     }
     
     start(): void {
@@ -19,14 +19,14 @@ export class PlayerLookup extends Plugin {
         this.log("Stopped")
     }
 
-    EntityManager_addOtherPlayer(PlayerPacket : any, entityManager : any) {
-        const player = entityManager.getPlayerByEntityId(PlayerPacket[0])
-        entityManager._addTargetActionToEntity(player, this.lookupContextAction, 0)
-    }
+    // EntityManager_addOtherPlayer(PlayerPacket : any, entityManager : any) {
+    //     const player = entityManager.getPlayerByEntityId(PlayerPacket[0])
+    //     entityManager._addTargetActionToEntity(player, this.lookupContextAction, 0)
+    // }
 
-    eG_handleTargetAction(actionNumber : any, targetPlayer : any) {
-        if (actionNumber === this.lookupContextAction) {
-            window.open(`https://highspell.com/hiscores/player/${targetPlayer._name}`);
-        }
-    }
+    // eG_handleTargetAction(actionNumber : any, targetPlayer : any) {
+    //     if (actionNumber === this.lookupContextAction) {
+    //         window.open(`https://highspell.com/hiscores/player/${targetPlayer._name}`);
+    //     }
+    // }
 }
