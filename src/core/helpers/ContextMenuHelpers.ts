@@ -43,7 +43,20 @@ export class ContextMenuHelper {
     }
 
     AddGameWorldMenuAction(actionName : string) : number {
-        return -1;
+        const ContextMenuActions = document.client.get('VA');
+    
+        if (ContextMenuActions[actionName] !== undefined) {
+            return ContextMenuActions[actionName];
+        }
+    
+        ContextMenuActions[ContextMenuActions[actionName] = (Object.keys(ContextMenuActions).length) / 2] = actionName;
+    
+        // Returns Entity Action Number;
+        const actionNumber = (Object.keys(ContextMenuActions).length / 2) - 1
+
+        this.gameWorldActions[actionName] = actionNumber;
+
+        return actionNumber;
     }
 
     AddSpellMenuAction(actionName : string) : number {
@@ -60,12 +73,48 @@ export class ContextMenuHelper {
 
         let output = actions;
 
-        const contextMenuActions = this.inventoryActions[ContextMenuTypes.Any][ActionState.Any];
-        for (const [actionName, actionInformation] of Object.entries(contextMenuActions)) {
-            output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this), r, actionInformation.actionNumber, i, n, null, 0));
+        const contextMenuActionsActionsSpecific = this.inventoryActions[ContextMenuTypes.Any][document.highlite.gameHooks.Classes.EntityManager.Instance._mainPlayer._currentState.getCurrentState()];
+
+
+        // Check if this.inventoryActions has key 'r'
+        if (this.inventoryActions[r] !== undefined) {
+            const contextMenuActionsContextSpecific = this.inventoryAction[r][ActionState.Any];
+            if (contextMenuActionsContextSpecific) {
+                for (const [actionName, actionInformation] of Object.entries(contextMenuActionsContextSpecific)) {
+                    output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this), r, actionInformation.actionNumber, i, n, null, 0));
+                }
+            }
+            
+            const contextMenuActionsContextSpecificActionSpecific = this.inventoryAction[r][document.highlite.gameHooks.Classes.EntityManager.Instance._mainPlayer._currentState.getCurrentState()];
+            if (contextMenuActionsContextSpecificActionSpecific) {
+                for (const [actionName, actionInformation] of Object.entries(contextMenuActionsContextSpecificActionSpecific)) {
+                    output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this), r, actionInformation.actionNumber, i, n, null, 0));
+                }
+            }
+        }
+
+        // Check if this.inventoryActions has key 'ContextMenuTypes.Any'
+        if (this.inventoryActions[ContextMenuTypes.Any] !== undefined) {
+            const contextMenuActions = this.inventoryActions[ContextMenuTypes.Any][ActionState.Any];
+            if (contextMenuActions) {
+                for (const [actionName, actionInformation] of Object.entries(contextMenuActions)) {
+                    output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this), r, actionInformation.actionNumber, i, n, null, 0));
+                }
+            }
+
+            const contextMenuActionsActionSpecific = this.inventoryActions[ContextMenuTypes.Any][document.highlite.gameHooks.Classes.EntityManager.Instance._mainPlayer._currentState.getCurrentState()];
+            if (contextMenuActionsActionSpecific) {
+                for (const [actionName, actionInformation] of Object.entries(contextMenuActionsActionSpecific)) {
+                    output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this), r, actionInformation.actionNumber, i, n, null, 0));
+                }
+            }
         }
 
         return output;
+    }
+
+    gameWorldContextHook(...args : any) : any {
+        console.warn(args);
     }
 
     inventoryActionHandler(e, i : any) {
@@ -85,9 +134,6 @@ export class ContextMenuHelper {
         }
     }
 
-
-    
-
     registerContextHook(sourceClass : string, fnName : string, hookFn : Function) : boolean {
         const self = this;
         const classObject = document.client.get(sourceClass).prototype;
@@ -105,17 +151,7 @@ export class ContextMenuHelper {
 
 
 export function AddEntityAction(actionName : string) : number {
-    const ContextMenuActions = document.client.get('VA');
-    
-    if (ContextMenuActions[actionName] !== undefined) {
-        return ContextMenuActions[actionName];
-    }
 
-    ContextMenuActions[ContextMenuActions[actionName] = (Object.keys(ContextMenuActions).length) / 2] = actionName;
-
-    // Returns Entity Action Number;
-    const actionNumber = (Object.keys(ContextMenuActions).length / 2) - 1
-    return actionNumber;
 }
 
 export function AddInventoryItemAction(actionName: string) : number {

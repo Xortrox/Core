@@ -11,9 +11,6 @@ export class WikiLookup extends Plugin {
 
     init(): void {
         this.log("Initializing");
-        // this.lookupContextActionInventory = AddInventoryItemAction("Lookup");
-        // this.lookupContextActionEntities = AddEntityAction("Lookup");
-
         document.highlite.Helpers.ContextMenu.AddInventoryItemMenuAction("Lookup", this.handleInventoryAction, ActionState.Any, ContextMenuTypes.Any);
     }
 
