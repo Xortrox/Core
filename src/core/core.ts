@@ -42,6 +42,7 @@ export class Highlite {
 
         // Function Hook-ins
         this.registerClassHook("GameLoop", "_update");
+        this.registerClassHook("GameLoop", "_draw");
         this.registerClassHook("SocketManager", "_loggedIn");
         this.registerClassHook("SocketManager", "_handleLoggedOut");
         this.registerClassHook("SocketManager", "_handleEnteredIdleStateAction");

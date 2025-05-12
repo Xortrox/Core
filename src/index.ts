@@ -3,6 +3,7 @@ import { HPAlert } from "./core/plugins/HPAlert";
 import { IdleAlert } from "./core/plugins/IdleAlert";
 import { VersionNotification } from "./core/plugins/VersionNotification";
 import { Lookup } from "./core/plugins/Lookup";
+import { Nameplates } from "./core/plugins/Nameplates";
 
 // This instance self-inserts itself into document.highlite
 
@@ -25,6 +26,7 @@ function startHighlite() {
     highlite.pluginLoader.registerPlugin(HPAlert);  
     highlite.pluginLoader.registerPlugin(IdleAlert);
     highlite.pluginLoader.registerPlugin(Lookup);
+    highlite.pluginLoader.registerPlugin(Nameplates);
 
     // Start the highlite instance
     highlite.start();
