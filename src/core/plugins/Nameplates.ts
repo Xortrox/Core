@@ -1,5 +1,5 @@
 import { Plugin } from "../interfaces/plugin.class";
-import {Viewport, Matrix, Vector3} from "@babylonjs/core";
+import {Viewport, Matrix, Vector3, Frustum, Camera, Mesh} from "@babylonjs/core";
 
 export class Nameplates extends Plugin {
     pluginName: string = "Nameplates";
@@ -154,12 +154,20 @@ export class Nameplates extends Plugin {
     }
 
                         // Halo  // DIV Element
-    updateElementPosition(e: any, t: Vector3) {
+    updateElementPosition(e: Mesh, t: Vector3) {
         const translationCoordinates = Vector3.Project(Vector3.ZeroReadOnly, 
             e.getWorldMatrix(), 
             this.gameHooks.Classes.GameEngine.Instance.Scene.getTransformMatrix(),
             this.gameHooks.Classes.GameCameraManager.Camera.viewport.toGlobal(this.gameHooks.Classes.GameEngine.Instance.Engine.getRenderWidth(1), this.gameHooks.Classes.GameEngine.Instance.Engine.getRenderHeight(1)),
         );
+        const camera : Camera =  this.gameHooks.Classes.GameCameraManager.Camera;
+        const isInFrustrum = e.isInFrustum(Frustum.GetPlanes(camera.getTransformationMatrix()));
+        if (!isInFrustrum) {
+            t.style.visibility = "hidden";
+        } else {
+            t.style.visibility = "visible";
+        }
+
         t.style.transform = "translate3d(calc(" + this.pxToRem(translationCoordinates.x) + "rem - 50%), calc(" + this.pxToRem(translationCoordinates.y) + "rem - 50%), 0px)"
 
 
