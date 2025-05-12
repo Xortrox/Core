@@ -56,22 +56,6 @@ export class Nameplates extends Plugin {
         this.PlayerDomElements = {};
     }
 
-    isMeshInView(mesh, camera) {
-      // Check if the mesh is in front of the camera
-      var directionToCamera = camera.position.subtract(mesh.position);
-      if (Vector3.Dot(directionToCamera, camera.getFrontVector()) < 0) {
-        return false; // Mesh is behind the camera
-      }
-
-      // Check if the mesh is inside the camera's frustum
-      if (!camera.isInFrustum(mesh.getBoundingInfo().boundingBox)) {
-        return false; // Mesh is outside the camera's frustum
-      }
-
-      return true;
-    }
-
-
     GameLoop_draw() {
         const NPCS = this.gameHooks.Classes.EntityManager.Instance._npcs; // Map
         const Players = this.gameHooks.Classes.EntityManager.Instance._players; // Array
@@ -151,7 +135,7 @@ export class Nameplates extends Plugin {
             this.NPCDomElements[key].style.top = `${screenPosition.y}px`;
 
             // If not visible, hide the element
-            if (this.isMeshInView(npcMesh, camera) == false) {
+            if (screenPosition.z < 0) {
                 this.NPCDomElements[key].style.visibility = "hidden";
             }
             else {
@@ -203,7 +187,7 @@ export class Nameplates extends Plugin {
             this.PlayerDomElements[player._entityId].style.left = `${screenPosition.x - this.PlayerDomElements[player._entityId].offsetWidth/2}px`;
             this.PlayerDomElements[player._entityId].style.top = `${screenPosition.y}px`;
             // If not visible, hide the element
-            if (this.isMeshInView(playerMesh, camera) == false) {
+            if (screenPosition.z < 0) {
                 this.PlayerDomElements[player._entityId].style.visibility = "hidden";
             }
             else {
