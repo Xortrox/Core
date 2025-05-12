@@ -111,36 +111,13 @@ export class Nameplates extends Plugin {
                 document.getElementById('highlite-nameplates')?.appendChild(this.NPCDomElements[key]);
             }
 
-            const npcMesh = npc._appearance._billboardMesh;
-            // Obtain Position Information
-            var boundingBox = npcMesh.getBoundingInfo().boundingBox;
-            var height = boundingBox.maximum.y - boundingBox.minimum.y;
-            var meshWorldPosition = npcMesh.getAbsolutePosition();
-            const scene = npcMesh._scene;
-            const camera = scene.activeCamera;
-
-            // Engine Info
-            const engine = scene.getEngine();
-            const screenWidth = engine.getRenderWidth();
-            const screenHeight = engine.getRenderHeight();
-
-            // Project the 3D position to 2D screen coordinates
-            const screenPosition = Vector3.Project(
-                new Vector3(meshWorldPosition.x, meshWorldPosition.y + height, meshWorldPosition.z), 
-                Matrix.Identity(),
-                scene.getTransformMatrix(),
-                new Viewport(0, 0, screenWidth, screenHeight)
-            );
-            this.NPCDomElements[key].style.left = `${screenPosition.x - this.NPCDomElements[key].offsetWidth/2}px`;
-            this.NPCDomElements[key].style.top = `${screenPosition.y}px`;
-
-            // If not visible, hide the element
-            if (screenPosition.z < 0) {
-                this.NPCDomElements[key].style.visibility = "hidden";
+            const npcMesh = npc._appearance._haloNode;
+            try {
+                this.updateElementPosition(npcMesh, this.NPCDomElements[key]);
+            } catch (e) {
+                this.log("Error updating NPC element position: ", e);
             }
-            else {
-                this.NPCDomElements[key].style.visibility = "visible";
-            }
+            
         }
 
         for (const player of Players) {
@@ -166,34 +143,29 @@ export class Nameplates extends Plugin {
                 }
             }
 
-            const playerMesh = player._appearance._billboardMesh;
-            // Obtain Position Information
-            var boundingBox = playerMesh.getBoundingInfo().boundingBox;
-            var height = boundingBox.maximum.y - boundingBox.minimum.y;
-            var meshWorldPosition = playerMesh.getAbsolutePosition();
-            const scene = playerMesh._scene;
-            const camera = scene.activeCamera;
-            // Engine Info
-            const engine = scene.getEngine();
-            const screenWidth = engine.getRenderWidth();
-            const screenHeight = engine.getRenderHeight();
-            // Project the 3D position to 2D screen coordinates
-            const screenPosition = Vector3.Project(
-                new Vector3(meshWorldPosition.x, meshWorldPosition.y + height, meshWorldPosition.z), 
-                Matrix.Identity(),
-                scene.getTransformMatrix(),
-                new Viewport(0, 0, screenWidth, screenHeight)
-            );
-            this.PlayerDomElements[player._entityId].style.left = `${screenPosition.x - this.PlayerDomElements[player._entityId].offsetWidth/2}px`;
-            this.PlayerDomElements[player._entityId].style.top = `${screenPosition.y}px`;
-            // If not visible, hide the element
-            if (screenPosition.z < 0) {
-                this.PlayerDomElements[player._entityId].style.visibility = "hidden";
+            const playerMesh = player._appearance._haloNode;
+            try {
+                this.updateElementPosition(playerMesh, this.PlayerDomElements[player._entityId]);
+            } catch (e) {
+                this.log("Error updating Player element position: ", e);
             }
-            else {
-                this.PlayerDomElements[player._entityId].style.visibility = "visible";
-            }
+            
         }
+    }
+
+                        // Halo  // DIV Element
+    updateElementPosition(e: any, t: Vector3) {
+        const translationCoordinates = Vector3.Project(Vector3.ZeroReadOnly, 
+            e.getWorldMatrix(), 
+            this.gameHooks.Classes.GameEngine.Instance.Scene.getTransformMatrix(),
+            this.gameHooks.Classes.GameCameraManager.Camera.viewport.toGlobal(this.gameHooks.Classes.GameEngine.Instance.Engine.getRenderWidth(1), this.gameHooks.Classes.GameEngine.Instance.Engine.getRenderHeight(1)),
+        );
+        t.style.transform = "translate3d(calc(" + this.pxToRem(translationCoordinates.x) + "rem - 50%), calc(" + this.pxToRem(translationCoordinates.y) + "rem - 50%), 0px)"
+
+
+    }
+    pxToRem(px: number) {
+        return px / 16;
     }
 
 }

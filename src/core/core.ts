@@ -34,6 +34,7 @@ export class Highlite {
         this.registerClass("qz", "ItemManager");
         this.registerClass("$z", "GameEngine");
         this.registerClass("LF", "MainPlayer");
+        this.registerClass("tR", "GameCameraManager");
 
         // Needs Naming
         this.registerClass("AF", "AF");
