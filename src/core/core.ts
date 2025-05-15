@@ -35,6 +35,7 @@ export class Highlite {
         this.registerClass("$z", "GameEngine");
         this.registerClass("LF", "MainPlayer");
         this.registerClass("tR", "GameCameraManager");
+        this.registerClass("RX", "HealthBar")
 
         // Needs Naming
         this.registerClass("AF", "AF");
@@ -48,6 +49,7 @@ export class Highlite {
         this.registerClassHook("SocketManager", "_handleLoggedOut");
         this.registerClassHook("SocketManager", "_handleEnteredIdleStateAction");
         this.registerClassHook("EntityManager", "addOtherPlayer");
+        this.registerClassHook("HealthBar", "_updateCurrentHealthbarColor");
 
         // Needs Naming
         this.registerClassHook("AF", "addItemToInventory");
