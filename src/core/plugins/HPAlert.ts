@@ -1,3 +1,4 @@
+import { NotificationHelper } from "../helpers/NotificationHelper";
 import { Plugin } from "../interfaces/plugin.class";
 
 export class HPAlert extends Plugin {
@@ -7,6 +8,7 @@ export class HPAlert extends Plugin {
         activationPercent : 0.5,
         enabled : true
     };
+    doNotify = true;
 
     init(): void {
         this.log("Initializing");
@@ -53,6 +55,12 @@ export class HPAlert extends Plugin {
             osc2.connect(gain);
             osc2.start(ctx.currentTime + 0.25);
             osc2.stop(ctx.currentTime + 0.45); // Another 0.2-second chirp
+            if (this.doNotify) {
+                this.doNotify = false;
+                NotificationHelper.showNotification(`${player._name} is low on health!`);
+            }
+        } else {
+            this.doNotify = true;
         }
     }
 }

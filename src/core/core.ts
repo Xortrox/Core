@@ -1,4 +1,5 @@
 import { ContextMenuHelper } from "./helpers/ContextMenuHelpers";
+import { NotificationHelper } from "./helpers/NotificationHelper";
 import { PluginLoader } from "./pluginLoader";
 
 export class Highlite {
@@ -59,6 +60,7 @@ export class Highlite {
         this.registerClassHook("ItemManager", "invokeInventoryAction");
 
         
+        NotificationHelper.askNotificationPermission();
         /*
          Post-Hooking, we tell HighSpell Client to start by re-running DOMContentLoaded
          Highlite Loader removes the client so it does not get a chance to see this event before now.
