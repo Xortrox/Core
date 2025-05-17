@@ -6,7 +6,9 @@ export class Nameplates extends Plugin {
     settings: { [key: string]: string | number | boolean; } = {};
 
     NampeplateContainer : HTMLDivElement | null = null;
-    NPCDomElements = {}
+    NPCDomElements : {
+        [key : string] : HTMLDivElement
+    } = {}
     PlayerDomElements = {}
 
 
@@ -35,7 +37,7 @@ export class Nameplates extends Plugin {
             this.DOMElement.style.fontFamily = "Inter";
             this.DOMElement.style.fontSize = "12px";
             this.DOMElement.style.fontWeight = "bold";
-            document.getElementById('game-container')?.appendChild(this.DOMElement);
+            document.getElementById('hs-screen-mask')?.appendChild(this.DOMElement);
         }
     }
 
@@ -59,6 +61,9 @@ export class Nameplates extends Plugin {
     GameLoop_draw() {
         const NPCS = this.gameHooks.Classes.EntityManager.Instance._npcs; // Map
         const Players = this.gameHooks.Classes.EntityManager.Instance._players; // Array
+        const playerCombatLevel = this.gameHooks.Classes.EntityManager.Instance.MainPlayer._combatLevel;
+        const _W = document.client.get("_W");
+        
 
         // Clear non-existing NPCs
         if (NPCS.size == 0) {
@@ -106,8 +111,36 @@ export class Nameplates extends Plugin {
                 this.NPCDomElements[key].style.position = "absolute";
                 this.NPCDomElements[key].style.pointerEvents = "none";
                 this.NPCDomElements[key].style.zIndex = "1000";
-                this.NPCDomElements[key].style.color = "yellow";
-                this.NPCDomElements[key].innerHTML = npc._name;
+                this.NPCDomElements[key].style.display = "flex";
+                this.NPCDomElements[key].style.flexDirection = "column";
+                // this.NPCDomElements[key].innerHTML = npc._name;
+                
+                // Create Name Holder
+                const nameSpan = document.createElement("span");
+                nameSpan.style.color = "yellow";
+                nameSpan.innerText = npc._name;
+                this.NPCDomElements[key].append(nameSpan);
+
+                // Create Lvl Holder
+                if (npc._combatLevel != 0) {
+                    const lvlSpan = document.createElement("span");
+                    lvlSpan.innerText = `Lvl. ${npc._combatLevel}`
+                    lvlSpan.className = _W.getTextColorClassNameForCombatLevelDifference(playerCombatLevel, npc._combatLevel)
+                    
+                    if (npc._def._combat._isAggressive && !npc._def._combat._isAlwaysAggro) {
+                        lvlSpan.innerText += " 😠"
+                    }
+
+                    if (!npc._def._combat._isAggressive && !npc._def._combat._isAlwaysAggro) {
+                        lvlSpan.innerText += " 😐"
+                    }
+
+                    if (npc._def._combat._isAlwaysAggro) {
+                        lvlSpan.innerText += " 👿";
+                    }
+                    this.NPCDomElements[key].append(lvlSpan);
+                }
+
                 document.getElementById('highlite-nameplates')?.appendChild(this.NPCDomElements[key]);
             }
 
@@ -177,6 +210,3 @@ export class Nameplates extends Plugin {
     }
 
 }
-
-
-// 

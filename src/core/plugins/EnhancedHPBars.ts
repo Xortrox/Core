@@ -5,6 +5,8 @@ export class EnhancedHPBars extends Plugin {
     settings: { [key: string]: string | number | boolean; } = {};
 
     targetContainer : HTMLDivElement | null = null;
+    previousTarget : any | null = null;
+    lostTargetTime : number | null = null;
     nameDiv : HTMLDivElement | null = null;
     healthBarBack : HTMLDivElement | null = null;
     healthBarFront : HTMLDivElement | null = null;
@@ -94,11 +96,27 @@ export class EnhancedHPBars extends Plugin {
         }
 
         const target = this.gameHooks.Classes.EntityManager.Instance.MainPlayer._currentTarget;
-        if (target && target._def._combat) {
+        if (target && target._def && target._def._combat) {
             this.targetContainer.style.visibility = "visible";
             this.nameDiv.innerText = target._name;
             this.healthText.innerText = `${target._hitpoints._currentLevel}/${target._hitpoints._level}`;
             this.healthBarFront.style.width = `${(target._hitpoints._currentLevel / target._hitpoints._level) * 100}%`;
+            this.previousTarget = target;
+            this.lostTargetTime = null;
+        } else if (!target && this.previousTarget && this.previousTarget._def && this.previousTarget._def._combat) {
+            if (!this.lostTargetTime) {
+                this.lostTargetTime = Date.now();
+            }
+            if ((Date.now() - this.lostTargetTime) >= 20000) {
+                this.lostTargetTime = null;
+                this.previousTarget = null;
+                return;
+            }
+            this.targetContainer.style.visibility = "visible";
+            this.nameDiv.innerText = this.previousTarget._name;
+            this.healthText.innerText = `${this.previousTarget._hitpoints._currentLevel}/${this.previousTarget._hitpoints._level}`;
+            this.healthBarFront.style.width = `${(this.previousTarget._hitpoints._currentLevel / this.previousTarget._hitpoints._level) * 100}%`;
+
         } else {
             this.targetContainer.style.visibility = "hidden";
         }
