@@ -33,5 +33,10 @@ function startHighlite() {
     // Start the highlite instance
     highlite.start();
 
-    new Audio("https://cdn.pixabay.com/download/audio/2022/01/07/audio_d42d80c8e4.mp3?filename=stop-13692.mp3").play();
+    
+    async function playSound(source) {
+        chrome.runtime.sendMessage({ play: source  });
+    }
+
+    playSound("https://cdn.pixabay.com/download/audio/2022/01/07/audio_d42d80c8e4.mp3?filename=stop-13692.mp3");
 }
