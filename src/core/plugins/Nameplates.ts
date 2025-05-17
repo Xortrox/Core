@@ -4,6 +4,7 @@ import {Viewport, Matrix, Vector3, Frustum, Camera, Mesh} from "@babylonjs/core"
 export class Nameplates extends Plugin {
     pluginName: string = "Nameplates";
     settings: { [key: string]: string | number | boolean; } = {};
+    doOnce = 0;
 
     NampeplateContainer : HTMLDivElement | null = null;
     NPCDomElements : {
@@ -78,6 +79,7 @@ export class Nameplates extends Plugin {
                 delete this.NPCDomElements[key];
             }
         }
+        
 
         // Clear non-existing Players
         if (Players.length == 0) {
@@ -113,17 +115,22 @@ export class Nameplates extends Plugin {
                 this.NPCDomElements[key].style.zIndex = "1000";
                 this.NPCDomElements[key].style.display = "flex";
                 this.NPCDomElements[key].style.flexDirection = "column";
+                // Center children
+                this.NPCDomElements[key].style.justifyContent = "center";
                 // this.NPCDomElements[key].innerHTML = npc._name;
                 
                 // Create Name Holder
-                const nameSpan = document.createElement("span");
+                const nameSpan = document.createElement("div");
                 nameSpan.style.color = "yellow";
+                nameSpan.style.textAlign = "center";
+
                 nameSpan.innerText = npc._name;
                 this.NPCDomElements[key].append(nameSpan);
 
                 // Create Lvl Holder
                 if (npc._combatLevel != 0) {
-                    const lvlSpan = document.createElement("span");
+                    const lvlSpan = document.createElement("div");
+                    lvlSpan.style.textAlign = "center";
                     lvlSpan.innerText = `Lvl. ${npc._combatLevel}`
                     lvlSpan.className = _W.getTextColorClassNameForCombatLevelDifference(playerCombatLevel, npc._combatLevel)
                     
@@ -150,7 +157,6 @@ export class Nameplates extends Plugin {
             } catch (e) {
                 this.log("Error updating NPC element position: ", e);
             }
-            
         }
 
         for (const player of Players) {
