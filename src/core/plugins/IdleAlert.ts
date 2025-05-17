@@ -6,7 +6,7 @@ export class IdleAlert extends Plugin {
     pluginName: string = "IdleAlert";
     settings: {} = {};
 
-    ignoredStates: ActionState[] = [ActionState.BankingState, ActionState.ClimbSameMapLevelState, ActionState.GoThroughDoorState, ActionState.PlayerLoggingOutState, ActionState.PlayerDeadState, ActionState.StunnedState];
+    ignoredStates: ActionState[] = [ActionState.BankingState, ActionState.ClimbSameMapLevelState, ActionState.GoThroughDoorState, ActionState.PlayerLoggingOutState, ActionState.PlayerDeadState, ActionState.StunnedState, ActionState.TradingState];
     actionState : number = ActionState.IdleState;
     idleTicks : number = 0;
     shouldTick : boolean = false;

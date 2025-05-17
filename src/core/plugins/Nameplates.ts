@@ -26,20 +26,18 @@ export class Nameplates extends Plugin {
     }
 
     SocketManager_loggedIn(...args : any) {
-        if (!this.DOMElement) {
-            this.DOMElement = document.createElement('div');
-            this.DOMElement.id = "highlite-nameplates";
-            this.DOMElement.style.position = "absolute";
-            this.DOMElement.style.pointerEvents = "none";
-            this.DOMElement.style.zIndex = "1";
-            this.DOMElement.style.overflow = "hidden";
-            this.DOMElement.style.width = "100%";
-            this.DOMElement.style.height = "100%";
-            this.DOMElement.style.fontFamily = "Inter";
-            this.DOMElement.style.fontSize = "12px";
-            this.DOMElement.style.fontWeight = "bold";
-            document.getElementById('hs-screen-mask')?.appendChild(this.DOMElement);
-        }
+        this.DOMElement = document.createElement('div');
+        this.DOMElement.id = "highlite-nameplates";
+        this.DOMElement.style.position = "absolute";
+        this.DOMElement.style.pointerEvents = "none";
+        this.DOMElement.style.zIndex = "1";
+        this.DOMElement.style.overflow = "hidden";
+        this.DOMElement.style.width = "100%";
+        this.DOMElement.style.height = "100%";
+        this.DOMElement.style.fontFamily = "Inter";
+        this.DOMElement.style.fontSize = "12px";
+        this.DOMElement.style.fontWeight = "bold";
+        document.getElementById('hs-screen-mask')?.appendChild(this.DOMElement);
     }
 
     SocketManager_handleLoggedOut(...args : any) {
@@ -207,7 +205,7 @@ export class Nameplates extends Plugin {
             t.style.visibility = "visible";
         }
 
-        t.style.transform = "translate3d(calc(" + this.pxToRem(translationCoordinates.x) + "rem - 50%), calc(" + this.pxToRem(translationCoordinates.y - 10) + "rem - 50%), 0px)"
+        t.style.transform = "translate3d(calc(" + this.pxToRem(translationCoordinates.x) + "rem - 50%), calc(" + this.pxToRem(translationCoordinates.y - 15) + "rem - 50%), 0px)"
 
 
     }

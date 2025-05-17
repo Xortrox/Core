@@ -95,15 +95,15 @@ export class EnhancedHPBars extends Plugin {
             return;
         }
 
-        const target = this.gameHooks.Classes.EntityManager.Instance.MainPlayer._currentTarget;
-        if (target && target._def && target._def._combat) {
+        const target = this.gameHooks.Classes.EntityManager.Instance.MainPlayer.CurrentTarget;
+        if (target && target.Def && target.Def.Combat) {
             this.targetContainer.style.visibility = "visible";
-            this.nameDiv.innerText = target._name;
-            this.healthText.innerText = `${target._hitpoints._currentLevel}/${target._hitpoints._level}`;
-            this.healthBarFront.style.width = `${(target._hitpoints._currentLevel / target._hitpoints._level) * 100}%`;
+            this.nameDiv.innerText = target.Name;
+            this.healthText.innerText = `${target.Hitpoints.CurrentLevel}/${target.Hitpoints.Level}`;
+            this.healthBarFront.style.width = `${(target.Hitpoints.CurrentLevel / target.Hitpoints.Level) * 100}%`;
             this.previousTarget = target;
             this.lostTargetTime = null;
-        } else if (!target && this.previousTarget && this.previousTarget._def && this.previousTarget._def._combat) {
+        } else if (!target && this.previousTarget && this.previousTarget.Def && this.previousTarget.Def.Combat) {
             if (!this.lostTargetTime) {
                 this.lostTargetTime = Date.now();
             }
@@ -113,9 +113,9 @@ export class EnhancedHPBars extends Plugin {
                 return;
             }
             this.targetContainer.style.visibility = "visible";
-            this.nameDiv.innerText = this.previousTarget._name;
-            this.healthText.innerText = `${this.previousTarget._hitpoints._currentLevel}/${this.previousTarget._hitpoints._level}`;
-            this.healthBarFront.style.width = `${(this.previousTarget._hitpoints._currentLevel / this.previousTarget._hitpoints._level) * 100}%`;
+            this.nameDiv.innerText = this.previousTarget.Name;
+            this.healthText.innerText = `${this.previousTarget.Hitpoints.CurrentLevel}/${this.previousTarget.Hitpoints.Level}`;
+            this.healthBarFront.style.width = `${(this.previousTarget.Hitpoints.CurrentLevel / this.previousTarget.Hitpoints.Level) * 100}%`;
 
         } else {
             this.targetContainer.style.visibility = "hidden";
