@@ -1,16 +1,13 @@
 {
   "name": "core",
-  "module": "index.ts",
   "version": "0.0.5",
-  "type": "module",
-  "private": true,
+  "module": "index.ts",
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
-  "dependencies": {
-    "@babylonjs/core": "^8.7.0"
-  }
+  "private": true,
+  "type": "module"
 }

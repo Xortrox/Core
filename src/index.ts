@@ -6,21 +6,22 @@ import { Lookup } from "./core/plugins/Lookup";
 import { Nameplates } from "./core/plugins/Nameplates";
 import { EnhancedHPBars } from "./core/plugins/EnhancedHPBars";
 
-// This instance self-inserts itself into document.highlite
+// Wait for document.client to be defined from the HighSpell client
+const waitForLoader = () => {
+    return new Promise((resolve) => {
+        const checkClient = () => {
+            if (document.client) {
+                resolve(true);
+            } else {
+                setTimeout(checkClient, 100);
+            }
+        };
+        checkClient();
+    });
+};
 
-
-// If in development mode, set a documnet variable to allow manual access to startHighlite() function, otherwise just run startHighlite()
-if (process.env.NODE_ENV === 'development') {
-    document.startHighlite = startHighlite;
-}
-// If in production mode, just run startHighlite()
-else {
-    startHighlite();
-}
-
-
-function startHighlite() {
-    // Initialize the Highlite instance
+// This waitForLoader self-inserts itself into document.highlite
+waitForLoader().then(() => {
     const highlite = new Highlite();
 
     highlite.pluginLoader.registerPlugin(VersionNotification);
@@ -32,11 +33,5 @@ function startHighlite() {
 
     // Start the highlite instance
     highlite.start();
+});
 
-    
-    async function playSound(source) {
-        chrome.runtime.sendMessage({ play: source  });
-    }
-
-    playSound("https://cdn.pixabay.com/download/audio/2022/01/07/audio_d42d80c8e4.mp3?filename=stop-13692.mp3");
-}

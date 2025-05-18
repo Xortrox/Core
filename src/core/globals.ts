@@ -8,6 +8,10 @@ declare global {
             [key: string]: any,
         },
 
+        BABYLON: {
+            [key: string]: any,
+        },
+
         client: {
             [key: string]: any,
         },

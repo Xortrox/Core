@@ -15,6 +15,7 @@ export class Highlite {
         document.highlite.gameHooks = {};
         document.highlite.gameHooks.Classes = {};
         document.highlite.gameHooks.Listeners = {};
+        document.BABYLON = document.client.get("ro")
 
         // Listeners Hook-In
         // this.attachListeners("NI");
