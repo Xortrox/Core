@@ -67,7 +67,7 @@ export class Nameplates extends Plugin {
         
 
         // Clear non-existing NPCs
-        if (NPCS.size == 0 || this.settings.enable == false) {
+        if (NPCS.size == 0 || this.settings.enable == false || this.settings.npcNameplates == false) {
             for (const key in this.NPCDomElements) {
                 this.NPCDomElements[key].remove();
                 delete this.NPCDomElements[key];
@@ -82,7 +82,7 @@ export class Nameplates extends Plugin {
         
 
         // Clear non-existing Players
-        if (Players.length == 0 || this.settings.enable == false) {
+        if (Players.length == 0 || this.settings.enable == false || this.settings.playerNameplates == false) {
             for (const key in this.PlayerDomElements) {
                 this.PlayerDomElements[key].remove();
                 delete this.PlayerDomElements[key];
