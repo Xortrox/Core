@@ -2,7 +2,9 @@ import { Plugin } from "../interfaces/plugin.class";
 
 export class Nameplates extends Plugin {
     pluginName: string = "Nameplates";
-    settings: { [key: string]: string | number | boolean; } = {};
+    settings = {
+        enable: true,
+    };
     doOnce = 0;
 
     NampeplateContainer : HTMLDivElement | null = null;

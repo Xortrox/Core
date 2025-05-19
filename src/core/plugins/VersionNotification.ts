@@ -4,10 +4,12 @@ let pJSON = require('../../../package.json');
 
 
 export class VersionNotification extends Plugin {
-    pluginName: string = "VersionNotification";
+    pluginName: string = "Version Notification";
     highliteVersionElement : HTMLButtonElement | null = null;
 
-    settings = {};
+    settings = {
+        enable: true
+    };
 
     init(): void {
         this.log('Initializing');

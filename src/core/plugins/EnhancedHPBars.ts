@@ -1,8 +1,10 @@
 import { Plugin } from "../interfaces/plugin.class";
 
 export class EnhancedHPBars extends Plugin {
-    pluginName: string = "EnhancedHPBars";
-    settings: { [key: string]: string | number | boolean; } = {};
+    pluginName: string = "Enhanced HP Bars";
+    settings = {
+        enable: true,
+    };
 
     targetContainer : HTMLDivElement | null = null;
     previousTarget : any | null = null;

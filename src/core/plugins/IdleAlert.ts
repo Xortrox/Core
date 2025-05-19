@@ -3,8 +3,10 @@ import { ActionState } from "../interfaces/game/actionStates.enum.ts";
 import { NotificationHelper } from "../helpers/NotificationHelper.ts";
 
 export class IdleAlert extends Plugin {
-    pluginName: string = "IdleAlert";
-    settings: {} = {};
+    pluginName: string = "Idle Alert";
+    settings = {
+        enable: true,
+    };
 
     ignoredStates: ActionState[] = [ActionState.BankingState, ActionState.ClimbSameMapLevelState, ActionState.GoThroughDoorState, ActionState.PlayerLoggingOutState, ActionState.PlayerDeadState, ActionState.StunnedState, ActionState.TradingState];
     actionState : number = ActionState.IdleState;

@@ -5,10 +5,19 @@ export abstract class Plugin {
     abstract start(): void;
     abstract stop(): void;
     abstract settings : {
+        enable : boolean;
         [key: string] : number | boolean | string;
     }
     
     postInit?(): void;
+
+    onSettingsChanged_enabled(enable : boolean) {
+        if (enable) {
+            this.start();
+        } else {
+            this.stop();
+        }
+    }
 
     gameHooks = document.highlite.gameHooks
 

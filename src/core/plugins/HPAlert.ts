@@ -2,13 +2,13 @@ import { NotificationHelper } from "../helpers/NotificationHelper";
 import { Plugin } from "../interfaces/plugin.class";
 
 export class HPAlert extends Plugin {
-    pluginName: string = "HPAlert";
+    pluginName: string = "HP Alert";
     settings = {
         volume : 0.5,
         activationPercent : 0.5,
-        enabled : true
+        enable : true,
+        notification : true
     };
-    doNotify = true;
 
     init(): void {
         this.log("Initializing");
@@ -34,10 +34,10 @@ export class HPAlert extends Plugin {
             return;
         }
 
-        if ((player._hitpoints._currentLevel / player._hitpoints._level) < 0.5) {
+        if ((player._hitpoints._currentLevel / player._hitpoints._level) < this.settings.activationPercent) {
             const ctx = new AudioContext();
             const gain = ctx.createGain();
-            gain.gain.value = 0.1;
+            gain.gain.value = this.settings.volume;
             gain.connect(ctx.destination);
             
             // First chirp
@@ -55,7 +55,7 @@ export class HPAlert extends Plugin {
             osc2.connect(gain);
             osc2.start(ctx.currentTime + 0.25);
             osc2.stop(ctx.currentTime + 0.45); // Another 0.2-second chirp
-            if (this.doNotify) {
+            if (this.doNotify && this.settings.notification) {
                 this.doNotify = false;
                 NotificationHelper.showNotification(`${player._name} is low on health!`);
             }

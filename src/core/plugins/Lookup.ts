@@ -5,7 +5,9 @@ import { ContextMenuTypes } from "../interfaces/game/contextMenuTypes.enum";
 
 export class Lookup extends Plugin {
     pluginName: string = "Lookup";
-    settings: { [key: string]: string | number | boolean; } = {};
+    settings = {
+        enable: true,
+    };
     lookupContextActionInventory : number = 0;
     lookupContextActionEntities : number = 0;
 
