@@ -4,8 +4,8 @@ import { Plugin } from "../interfaces/plugin.class";
 export class HPAlert extends Plugin {
     pluginName: string = "HP Alert";
     settings = {
-        volume : 0.5,
-        activationPercent : 0.5,
+        volume : 50,
+        activationPercent : 50,
         enable : true,
         notification : true
     };
@@ -37,10 +37,10 @@ export class HPAlert extends Plugin {
             return;
         }
 
-        if ((player._hitpoints._currentLevel / player._hitpoints._level) < this.settings.activationPercent) {
+        if ((player._hitpoints._currentLevel / player._hitpoints._level) < (this.settings.activationPercent / 100)) {
             const ctx = new AudioContext();
             const gain = ctx.createGain();
-            gain.gain.value = this.settings.volume;
+            gain.gain.value = (this.settings.volume/100);
             gain.connect(ctx.destination);
             
             // First chirp
