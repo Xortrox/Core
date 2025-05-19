@@ -13,11 +13,6 @@ export class Lookup extends Plugin {
 
     init(): void {
         this.log("Initializing");
-        document.highlite.Helpers.ContextMenu.AddInventoryItemMenuAction("Lookup", this.handleInventoryLookup, ActionState.Any, ContextMenuTypes.Any);
-        document.highlite.Helpers.ContextMenu.AddGameWorldMenuAction("Lookup", this.handlePlayerLookup, EntityType.Player);
-        document.highlite.Helpers.ContextMenu.AddGameWorldMenuAction("Lookup", this.handleWorldObjectLookup, EntityType.NPC);
-        document.highlite.Helpers.ContextMenu.AddGameWorldMenuAction("Lookup", this.handleWorldObjectLookup, EntityType.WorldObject);
-        document.highlite.Helpers.ContextMenu.AddGameWorldMenuAction("Lookup", this.handleWorldObjectLookup, EntityType.GroundItem);
     }
 
     handleInventoryLookup(actionInfo : any, clickInfo : any) : any {
@@ -38,10 +33,18 @@ export class Lookup extends Plugin {
     }
 
     start(): void {
-        this.log("Started")
+        document.highlite.Helpers.ContextMenu.AddInventoryItemMenuAction("Lookup", this.handleInventoryLookup, ActionState.Any, ContextMenuTypes.Any);
+        document.highlite.Helpers.ContextMenu.AddGameWorldMenuAction("Lookup", this.handlePlayerLookup, EntityType.Player);
+        document.highlite.Helpers.ContextMenu.AddGameWorldMenuAction("Lookup", this.handleWorldObjectLookup, EntityType.NPC);
+        document.highlite.Helpers.ContextMenu.AddGameWorldMenuAction("Lookup", this.handleWorldObjectLookup, EntityType.WorldObject);
+        document.highlite.Helpers.ContextMenu.AddGameWorldMenuAction("Lookup", this.handleWorldObjectLookup, EntityType.GroundItem);
     }
 
     stop(): void {
-        this.log("Stopped");
+        document.highlite.Helpers.ContextMenu.RemoveInventoryItemMenuAction("Lookup", this.handleInventoryLookup, ActionState.Any, ContextMenuTypes.Any);
+        document.highlite.Helpers.ContextMenu.RemoveGameWorldMenuAction("Lookup", this.handlePlayerLookup, EntityType.Player);
+        document.highlite.Helpers.ContextMenu.RemoveGameWorldMenuAction("Lookup", this.handleWorldObjectLookup, EntityType.NPC);
+        document.highlite.Helpers.ContextMenu.RemoveGameWorldMenuAction("Lookup", this.handleWorldObjectLookup, EntityType.WorldObject);
+        document.highlite.Helpers.ContextMenu.RemoveGameWorldMenuAction("Lookup", this.handleWorldObjectLookup, EntityType.GroundItem);
     }
 }

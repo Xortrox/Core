@@ -23,6 +23,10 @@ export class VersionNotification extends Plugin {
     }
 
     SocketManager_loggedIn(...args : any) {
+        if (!this.settings.enable) {
+            return;
+        }
+
         if (!this.highliteVersionElement) {
             return;
         }
@@ -30,6 +34,10 @@ export class VersionNotification extends Plugin {
     }
 
     SocketManager_handleLoggedOut(...args : any) {
+        if (!this.settings.enable) {
+            return;
+        }
+
         if (!this.highliteVersionElement) {
             return;
         }
@@ -38,11 +46,19 @@ export class VersionNotification extends Plugin {
     }
     
     start(): void {
-        this.log("Started");
+        if (!this.settings.enable) {
+            return;
+        }
+
+        if (!this.highliteVersionElement) {
+            return;
+        }
+        // Re-add the element to the DOM
+        document.getElementById('game-container')?.appendChild(this.highliteVersionElement);
     }
 
     stop(): void {
-        this.log("Stopped");
+        this.highliteVersionElement?.remove();
     }
 
 }

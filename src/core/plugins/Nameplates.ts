@@ -4,8 +4,9 @@ export class Nameplates extends Plugin {
     pluginName: string = "Nameplates";
     settings = {
         enable: true,
+        playerNameplates: true,
+        npcNameplates: true,
     };
-    doOnce = 0;
 
     NampeplateContainer : HTMLDivElement | null = null;
     NPCDomElements : {
@@ -101,93 +102,98 @@ export class Nameplates extends Plugin {
             }
         }
 
+        if (!this.settings.enable) {
+            return;
+        }
 
-        
-        // Loop through all NPCs   
-        for (const [key,value] of NPCS) {
-            const npc = value;
-            if (!this.NPCDomElements[key]) {
-                this.NPCDomElements[key] = document.createElement('div');
-                this.NPCDomElements[key].id = `highlite-nameplates-${key}`;
-                this.NPCDomElements[key].style.position = "absolute";
-                this.NPCDomElements[key].style.pointerEvents = "none";
-                this.NPCDomElements[key].style.zIndex = "1000";
-                this.NPCDomElements[key].style.display = "flex";
-                this.NPCDomElements[key].style.flexDirection = "column";
-                // Center children
-                this.NPCDomElements[key].style.justifyContent = "center";
-                // this.NPCDomElements[key].innerHTML = npc._name;
-                
-                // Create Name Holder
-                const nameSpan = document.createElement("div");
-                nameSpan.style.color = "yellow";
-                nameSpan.style.textAlign = "center";
-
-                nameSpan.innerText = npc._name;
-                this.NPCDomElements[key].append(nameSpan);
-
-                // Create Lvl Holder
-                if (npc._combatLevel != 0) {
-                    const lvlSpan = document.createElement("div");
-                    lvlSpan.style.textAlign = "center";
-                    lvlSpan.innerText = `Lvl. ${npc._combatLevel}`
-                    lvlSpan.className = _W.getTextColorClassNameForCombatLevelDifference(playerCombatLevel, npc._combatLevel)
+        // Loop through all NPCs
+        if (this.settings.npcNameplates) {
+            for (const [key,value] of NPCS) {
+                const npc = value;
+                if (!this.NPCDomElements[key]) {
+                    this.NPCDomElements[key] = document.createElement('div');
+                    this.NPCDomElements[key].id = `highlite-nameplates-${key}`;
+                    this.NPCDomElements[key].style.position = "absolute";
+                    this.NPCDomElements[key].style.pointerEvents = "none";
+                    this.NPCDomElements[key].style.zIndex = "1000";
+                    this.NPCDomElements[key].style.display = "flex";
+                    this.NPCDomElements[key].style.flexDirection = "column";
+                    // Center children
+                    this.NPCDomElements[key].style.justifyContent = "center";
+                    // this.NPCDomElements[key].innerHTML = npc._name;
                     
-                    if (npc._def._combat._isAggressive && !npc._def._combat._isAlwaysAggro) {
-                        lvlSpan.innerText += " 😠"
+                    // Create Name Holder
+                    const nameSpan = document.createElement("div");
+                    nameSpan.style.color = "yellow";
+                    nameSpan.style.textAlign = "center";
+
+                    nameSpan.innerText = npc._name;
+                    this.NPCDomElements[key].append(nameSpan);
+
+                    // Create Lvl Holder
+                    if (npc._combatLevel != 0) {
+                        const lvlSpan = document.createElement("div");
+                        lvlSpan.style.textAlign = "center";
+                        lvlSpan.innerText = `Lvl. ${npc._combatLevel}`
+                        lvlSpan.className = _W.getTextColorClassNameForCombatLevelDifference(playerCombatLevel, npc._combatLevel)
+                        
+                        if (npc._def._combat._isAggressive && !npc._def._combat._isAlwaysAggro) {
+                            lvlSpan.innerText += " 😠"
+                        }
+
+                        if (!npc._def._combat._isAggressive && !npc._def._combat._isAlwaysAggro) {
+                            lvlSpan.innerText += " 😐"
+                        }
+
+                        if (npc._def._combat._isAlwaysAggro) {
+                            lvlSpan.innerText += " 👿";
+                        }
+                        this.NPCDomElements[key].append(lvlSpan);
                     }
 
-                    if (!npc._def._combat._isAggressive && !npc._def._combat._isAlwaysAggro) {
-                        lvlSpan.innerText += " 😐"
-                    }
-
-                    if (npc._def._combat._isAlwaysAggro) {
-                        lvlSpan.innerText += " 👿";
-                    }
-                    this.NPCDomElements[key].append(lvlSpan);
+                    document.getElementById('highlite-nameplates')?.appendChild(this.NPCDomElements[key]);
                 }
 
-                document.getElementById('highlite-nameplates')?.appendChild(this.NPCDomElements[key]);
-            }
-
-            const npcMesh = npc._appearance._haloNode;
-            try {
-                this.updateElementPosition(npcMesh, this.NPCDomElements[key]);
-            } catch (e) {
-                this.log("Error updating NPC element position: ", e);
+                const npcMesh = npc._appearance._haloNode;
+                try {
+                    this.updateElementPosition(npcMesh, this.NPCDomElements[key]);
+                } catch (e) {
+                    this.log("Error updating NPC element position: ", e);
+                }
             }
         }
 
-        for (const player of Players) {
-            if (!this.PlayerDomElements[player._entityId]) {
-                this.PlayerDomElements[player._entityId] = document.createElement('div');
-                this.PlayerDomElements[player._entityId].id = `highlite-nameplates-${player._entityId}`;
-                this.PlayerDomElements[player._entityId].style.position = "absolute";
-                this.PlayerDomElements[player._entityId].style.pointerEvents = "none";
-                this.PlayerDomElements[player._entityId].style.zIndex = "1000";
-                this.PlayerDomElements[player._entityId].style.color = "white";
-                this.PlayerDomElements[player._entityId].innerHTML = player._name;
-                document.getElementById('highlite-nameplates')?.appendChild(this.PlayerDomElements[player._entityId]);
-            }
-
-            // Check if Player is a friend
-            const playerFriends = this.gameHooks.Classes.ChatManager.Instance._friends;
-            for (const friend of playerFriends) {
-                if (friend == player._nameLowerCase) {
-                    this.PlayerDomElements[player._entityId].style.color = "lightgreen";
-                    break;
-                } else {
+        if (this.settings.playerNameplates) {
+            for (const player of Players) {
+                if (!this.PlayerDomElements[player._entityId]) {
+                    this.PlayerDomElements[player._entityId] = document.createElement('div');
+                    this.PlayerDomElements[player._entityId].id = `highlite-nameplates-${player._entityId}`;
+                    this.PlayerDomElements[player._entityId].style.position = "absolute";
+                    this.PlayerDomElements[player._entityId].style.pointerEvents = "none";
+                    this.PlayerDomElements[player._entityId].style.zIndex = "1000";
                     this.PlayerDomElements[player._entityId].style.color = "white";
+                    this.PlayerDomElements[player._entityId].innerHTML = player._name;
+                    document.getElementById('highlite-nameplates')?.appendChild(this.PlayerDomElements[player._entityId]);
                 }
-            }
 
-            const playerMesh = player._appearance._haloNode;
-            try {
-                this.updateElementPosition(playerMesh, this.PlayerDomElements[player._entityId]);
-            } catch (e) {
-                this.log("Error updating Player element position: ", e);
+                // Check if Player is a friend
+                const playerFriends = this.gameHooks.Classes.ChatManager.Instance._friends;
+                for (const friend of playerFriends) {
+                    if (friend == player._nameLowerCase) {
+                        this.PlayerDomElements[player._entityId].style.color = "lightgreen";
+                        break;
+                    } else {
+                        this.PlayerDomElements[player._entityId].style.color = "white";
+                    }
+                }
+
+                const playerMesh = player._appearance._haloNode;
+                try {
+                    this.updateElementPosition(playerMesh, this.PlayerDomElements[player._entityId]);
+                } catch (e) {
+                    this.log("Error updating Player element position: ", e);
+                }   
             }
-            
         }
     }
 

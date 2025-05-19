@@ -6,6 +6,9 @@ export class IdleAlert extends Plugin {
     pluginName: string = "Idle Alert";
     settings = {
         enable: true,
+        volume: 0.5,
+        activationTicks: 20,
+        notification: true,
     };
 
     ignoredStates: ActionState[] = [ActionState.BankingState, ActionState.ClimbSameMapLevelState, ActionState.GoThroughDoorState, ActionState.PlayerLoggingOutState, ActionState.PlayerDeadState, ActionState.StunnedState, ActionState.TradingState];
@@ -22,17 +25,11 @@ export class IdleAlert extends Plugin {
     stop(): void {
         this.log("Stopped");
     }
-
-    SocketManager_handleLoggedOut(...args : any) {
-    if (!this.highliteVersionElement) {
-        return;
-    }
-
-    this.highliteVersionElement.style.visibility = 'visible'
-    }
     
-
     GameLoop_update(...args : any) {
+        if (!this.settings.enable) {
+            return;
+        }
         const player = this.gameHooks.Classes.EntityManager.Instance._mainPlayer;
 
         if (player === undefined) {
@@ -63,10 +60,10 @@ export class IdleAlert extends Plugin {
             this.idleTicks = 0;
         }
 
-        if (this.idleTicks > 20) {
+        if (this.idleTicks > this.settings.activationTicks) {
             const ctx = new AudioContext();
             const gain = ctx.createGain();
-            gain.gain.value = 0.1;
+            gain.gain.value = this.settings.volume;
             gain.connect(ctx.destination);
             
             // First chirp
@@ -85,7 +82,9 @@ export class IdleAlert extends Plugin {
             osc2.start(ctx.currentTime + 0.25);
             osc2.stop(ctx.currentTime + 0.45); // Another 0.2-second chirp
 
-            NotificationHelper.showNotification(`${player._name} is idle!`);
+            if (this.settings.notification) {
+                NotificationHelper.showNotification(`${player._name} is idle!`);
+            }
             this.actionState = 0;
             this.idleTicks = 0;
         }

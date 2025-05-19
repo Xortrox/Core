@@ -20,13 +20,20 @@ export class EnhancedHPBars extends Plugin {
 
     start(): void {
         this.log("Started");
+        if (this.settings.enable && this.targetContainer !== null) {
+            // Re-add the element to the DOM
+            document.getElementById('hs-screen-mask')?.appendChild(this.targetContainer);
+        }
     }
 
     stop(): void {
-        this.log("Stopped");
+        this.targetContainer?.remove();
     }
 
     SocketManager_loggedIn(...args : any) {
+        if (!this.settings.enable) {
+            return;
+        }
         this.targetContainer = document.createElement('div');
         this.targetContainer.id = "highlite-target-container";
         this.targetContainer.className = "hs-menu hs-game-menu";
@@ -93,6 +100,10 @@ export class EnhancedHPBars extends Plugin {
     }
 
     GameLoop_draw() {
+        if (!this.settings.enable) {
+            return;
+        }
+
         if (!this.targetContainer || !this.nameDiv || !this.healthBarBack || !this.healthText || !this.healthBarFront) {
             return;
         }
