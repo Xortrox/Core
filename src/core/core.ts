@@ -100,12 +100,12 @@ export class Highlite {
         this.start();
     }
 
-    postLogin(...args) {
+    postLogin(...args: any[]) {
         console.info("[Highlite] Post Login Hook");
         this.settingsManagement.setVisible(true);
     }
     
-    postLogout(...args) {
+    postLogout(...args: any[]) {
         console.info("[Highlite] Post Logout Hook");
         this.settingsManagement.setVisible(false);
     }
