@@ -1,6 +1,7 @@
-import { Plugin } from "../interfaces/plugin.class";
-import { ActionState } from "../interfaces/game/actionStates.enum.ts";
-import { NotificationHelper } from "../helpers/NotificationHelper.ts";
+import { Plugin } from '../../interfaces/plugin.class';
+import { ActionState } from '../../interfaces/game/actionStates.enum.ts';
+import { NotificationHelper } from '../../helpers/NotificationHelper.ts';
+import { IdleOverlay } from './IdleOverlay.ts';
 
 export class IdleAlert extends Plugin {
     pluginName: string = "Idle Alert";
@@ -15,6 +16,8 @@ export class IdleAlert extends Plugin {
     actionState : number = ActionState.IdleState;
     idleTicks : number = 0;
     shouldTick : boolean = false;
+
+    idleOverlay : IdleOverlay = new IdleOverlay();
 
     init(): void {
         this.log("Initialized");
@@ -85,8 +88,17 @@ export class IdleAlert extends Plugin {
             if (this.settings.notification) {
                 NotificationHelper.showNotification(`${player._name} is idle!`);
             }
+
+            // TODO: settings.notificationOverlay?
+            if (this.settings.notification) {
+                this.idleOverlay.show();
+            }
+
             this.actionState = 0;
             this.idleTicks = 0;
         }
     }
+
+
 }
+
