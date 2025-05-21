@@ -81,6 +81,7 @@ export class Highlite {
         } else {
             console.info("[Highlite] Database initialized!");
         }
+        await this.notificationManager.askNotificationPermission();
         this.settingsManager.init();
         await this.settingsManager.registerPlugins();
         this.pluginManager.initAll();
