@@ -1,3 +1,5 @@
+import { Highlite } from "./core"
+
 declare global {
     interface Window {
         [key: string]: any,
@@ -5,6 +7,7 @@ declare global {
 
     interface Document {
         highlite: {
+            highlite: Highlite,
             [key: string]: any,
         },
 

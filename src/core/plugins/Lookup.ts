@@ -5,28 +5,27 @@ import { ContextMenuTypes } from "../interfaces/game/contextMenuTypes.enum";
 
 export class Lookup extends Plugin {
     pluginName: string = "Lookup";
-    settings = {
-        enable: true,
-    };
-    lookupContextActionInventory : number = 0;
-    lookupContextActionEntities : number = 0;
+
+    
+    lookupContextActionInventory: number = 0;
+    lookupContextActionEntities: number = 0;
 
     init(): void {
         this.log("Initializing");
     }
 
-    handleInventoryLookup(actionInfo : any, clickInfo : any) : any {
+    handleInventoryLookup(actionInfo: any, clickInfo: any): any {
         let item = actionInfo.getItem();
         window.open(`https://highspell.wiki/w/${(item.Def._nameCapitalized).replace(" ", "_")}`);
     }
 
-    handlePlayerLookup(actionInfo : any, clickInfo : any) : any {
+    handlePlayerLookup(actionInfo: any, clickInfo: any): any {
         let player = actionInfo.getEntity();
         let playerName = player._name;
         window.open(`https://highspell.com/hiscores/player/${playerName}`);
     }
 
-    handleWorldObjectLookup(actionInfo : any, clickInfo : any) : any {
+    handleWorldObjectLookup(actionInfo: any, clickInfo: any): any {
         let object = actionInfo.getEntity();
         let objectName = object._name;
         window.open(`https://highspell.wiki/w/${(objectName).replace(" ", "_")}`);
