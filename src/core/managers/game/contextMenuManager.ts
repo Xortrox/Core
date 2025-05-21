@@ -1,5 +1,5 @@
-import { ActionState } from "../interfaces/game/actionStates.enum";
-import { ContextMenuTypes } from "../interfaces/game/contextMenuTypes.enum";
+import { ActionState } from "../../interfaces/game/actionStates.enum";
+import { ContextMenuTypes } from "../../interfaces/game/contextMenuTypes.enum";
 
 export enum EntityType {
     Any = -1,
@@ -10,13 +10,20 @@ export enum EntityType {
     
 }
 
-export class ContextMenuHelper {
+export class ContextMenuManager {
+    private static instance: ContextMenuManager;
     defaultActions = {};
     inventoryActions = {};
     gameWorldActions = {};
     spellActions = {};
 
-
+    constructor() {
+        if (ContextMenuManager.instance) {
+            return ContextMenuManager.instance;
+        }
+        ContextMenuManager.instance = this;
+        document.highlite.managers.ContextMenuManager = this;
+    }
 
     AddDefaultMenuAction(actionName : string) : number {
         return -1;
@@ -141,10 +148,10 @@ export class ContextMenuHelper {
                 }
             }
             
-            const contextMenuActionsContextSpecificActionSpecific = this.inventoryAction[r][document.highlite.gameHooks.Classes.EntityManager.Instance._mainPlayer._currentState.getCurrentState()];
+            const contextMenuActionsContextSpecificActionSpecific = this.inventoryAction[r][document.highlite.gameHooks.EntityManager.Instance._mainPlayer._currentState.getCurrentState()];
             if (contextMenuActionsContextSpecificActionSpecific) {
                 for (const [actionName, actionInformation] of Object.entries(contextMenuActionsContextSpecificActionSpecific)) {
-                    output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this, r, document.highlite.gameHooks.Classes.EntityManager.Instance._mainPlayer._currentState.getCurrentState()), r, actionInformation.actionNumber, i, n, null, 0));
+                    output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this, r, document.highlite.gameHooks.EntityManager.Instance._mainPlayer._currentState.getCurrentState()), r, actionInformation.actionNumber, i, n, null, 0));
                 }
             }
         }
@@ -158,10 +165,10 @@ export class ContextMenuHelper {
                 }
             }
 
-            const contextMenuActionsActionSpecific = this.inventoryActions[ContextMenuTypes.Any][document.highlite.gameHooks.Classes.EntityManager.Instance._mainPlayer._currentState.getCurrentState()];
+            const contextMenuActionsActionSpecific = this.inventoryActions[ContextMenuTypes.Any][document.highlite.gameHooks.EntityManager.Instance._mainPlayer._currentState.getCurrentState()];
             if (contextMenuActionsActionSpecific) {
                 for (const [actionName, actionInformation] of Object.entries(contextMenuActionsActionSpecific)) {
-                    output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this, ContextMenuTypes.Any, document.highlite.gameHooks.Classes.EntityManager.Instance._mainPlayer._currentState.getCurrentState()), r, actionInformation.actionNumber, i, n, null, 0));
+                    output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this, ContextMenuTypes.Any, document.highlite.gameHooks.EntityManager.Instance._mainPlayer._currentState.getCurrentState()), r, actionInformation.actionNumber, i, n, null, 0));
                 }
             }
         }

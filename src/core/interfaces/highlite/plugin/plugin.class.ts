@@ -1,23 +1,32 @@
+import { SettingsTypes, type PluginSettings } from "./pluginSettings.interface";
+
 export abstract class Plugin {
     abstract pluginName : string;
 
     abstract init(): void;
     abstract start(): void;
     abstract stop(): void;
-    abstract settings : {
-        enable : boolean;
-        [key: string] : number | boolean | string;
-    }
-    
-    postInit?(): void;
+    settings: {
+        enable: PluginSettings;
+        [key: string]: PluginSettings;
+    } = {
+        enable: {
+            text: "Enable",
+            type: SettingsTypes.checkbox,
+            value: true,
+            callback: this.onSettingsChanged_enabled
+        }
+    };
 
-    onSettingsChanged_enabled(enable : boolean) {
-        if (enable) {
+    onSettingsChanged_enabled() {
+        if (this.settings.enable.value) {
             this.start();
         } else {
             this.stop();
         }
     }
+    
+    postInit?(): void;
 
     gameHooks = document.highlite.gameHooks
 

@@ -1,18 +1,33 @@
-import { Plugin } from "../interfaces/plugin.class";
+import { Plugin } from "../core/interfaces/highlite/plugin/plugin.class"
+import { SettingsTypes } from "../core/interfaces/highlite/plugin/pluginSettings.interface";
 
 export class Nameplates extends Plugin {
     pluginName: string = "Nameplates";
-    settings = {
-        enable: true,
-        playerNameplates: true,
-        npcNameplates: true,
-    };
+    DOMElement: HTMLDivElement | null = null;
+    constructor() {
+        super();
+        this.settings.playerNameplates = {
+            text: "Player Nameplates",
+            type: SettingsTypes.checkbox,
+            value: true,
+            callback: () => { } //NOOP
+
+        };
+        this.settings.npcNameplates = {
+            text: "NPC Nameplates",
+            type: SettingsTypes.checkbox,
+            value: true,
+            callback: () => { } //NOOP
+        };
+    }
 
     NampeplateContainer : HTMLDivElement | null = null;
     NPCDomElements : {
         [key : string] : HTMLDivElement
     } = {}
-    PlayerDomElements = {}
+    PlayerDomElements : {
+        [key : string] : HTMLDivElement
+    } = {}
 
 
     init(): void {
@@ -60,31 +75,31 @@ export class Nameplates extends Plugin {
     }
 
     GameLoop_draw() {
-        const NPCS = this.gameHooks.Classes.EntityManager.Instance._npcs; // Map
-        const Players = this.gameHooks.Classes.EntityManager.Instance._players; // Array
-        const playerCombatLevel = this.gameHooks.Classes.EntityManager.Instance.MainPlayer._combatLevel;
+        const NPCS = this.gameHooks.EntityManager.Instance._npcs; // Map
+        const Players = this.gameHooks.EntityManager.Instance._players; // Array
+        const playerCombatLevel = this.gameHooks.EntityManager.Instance.MainPlayer._combatLevel;
         const _W = document.client.get("_W");
-        
+
 
         // Clear non-existing NPCs
-        if (NPCS.size == 0 || this.settings.enable == false || this.settings.npcNameplates == false) {
+        if (NPCS.size == 0 || this.settings.enable.value == false || this.settings.npcNameplates!.value == false) {
             for (const key in this.NPCDomElements) {
-                this.NPCDomElements[key].remove();
+                this.NPCDomElements[key]!.remove();
                 delete this.NPCDomElements[key];
             }
         }
         for (const key in this.NPCDomElements) {
             if (!NPCS[key]) {
-                this.NPCDomElements[key].remove();
+                this.NPCDomElements[key]!.remove();
                 delete this.NPCDomElements[key];
             }
         }
         
 
         // Clear non-existing Players
-        if (Players.length == 0 || this.settings.enable == false || this.settings.playerNameplates == false) {
+        if (Players.length == 0 || this.settings.enable.value == false || this.settings.playerNameplates!.value == false) {
             for (const key in this.PlayerDomElements) {
-                this.PlayerDomElements[key].remove();
+                this.PlayerDomElements[key]!.remove();
                 delete this.PlayerDomElements[key];
             }
         }
@@ -96,18 +111,18 @@ export class Nameplates extends Plugin {
                 }
 
                 if (player == Players[Players.length - 1]) {
-                    this.PlayerDomElements[key].remove();
+                    this.PlayerDomElements[key]!.remove();
                     delete this.PlayerDomElements[key];
                 }
             }
         }
 
-        if (!this.settings.enable) {
+        if (!this.settings.enable.value) {
             return;
         }
 
         // Loop through all NPCs
-        if (this.settings.npcNameplates) {
+        if (this.settings.npcNameplates!.value) {
             for (const [key,value] of NPCS) {
                 const npc = value;
                 if (!this.NPCDomElements[key]) {
@@ -163,27 +178,27 @@ export class Nameplates extends Plugin {
             }
         }
 
-        if (this.settings.playerNameplates) {
+        if (this.settings.playerNameplates!.value) {
             for (const player of Players) {
                 if (!this.PlayerDomElements[player._entityId]) {
                     this.PlayerDomElements[player._entityId] = document.createElement('div');
-                    this.PlayerDomElements[player._entityId].id = `highlite-nameplates-${player._entityId}`;
-                    this.PlayerDomElements[player._entityId].style.position = "absolute";
-                    this.PlayerDomElements[player._entityId].style.pointerEvents = "none";
-                    this.PlayerDomElements[player._entityId].style.zIndex = "1000";
-                    this.PlayerDomElements[player._entityId].style.color = "white";
-                    this.PlayerDomElements[player._entityId].innerHTML = player._name;
-                    document.getElementById('highlite-nameplates')?.appendChild(this.PlayerDomElements[player._entityId]);
+                    this.PlayerDomElements[player._entityId]!.id = `highlite-nameplates-${player._entityId}`;
+                    this.PlayerDomElements[player._entityId]!.style.position = "absolute";
+                    this.PlayerDomElements[player._entityId]!.style.pointerEvents = "none";
+                    this.PlayerDomElements[player._entityId]!.style.zIndex = "1000";
+                    this.PlayerDomElements[player._entityId]!.style.color = "white";
+                    this.PlayerDomElements[player._entityId]!.innerHTML = player._name;
+                    document.getElementById('highlite-nameplates')?.appendChild(this.PlayerDomElements[player._entityId]!);
                 }
 
                 // Check if Player is a friend
-                const playerFriends = this.gameHooks.Classes.ChatManager.Instance._friends;
+                const playerFriends = this.gameHooks.ChatManager.Instance._friends;
                 for (const friend of playerFriends) {
                     if (friend == player._nameLowerCase) {
-                        this.PlayerDomElements[player._entityId].style.color = "lightgreen";
+                        this.PlayerDomElements[player._entityId]!.style.color = "lightgreen";
                         break;
                     } else {
-                        this.PlayerDomElements[player._entityId].style.color = "white";
+                        this.PlayerDomElements[player._entityId]!.style.color = "white";
                     }
                 }
 
@@ -201,10 +216,10 @@ export class Nameplates extends Plugin {
     updateElementPosition(e: any, t : any) {
         const translationCoordinates = document.BABYLON.Pq.Project(document.BABYLON.Pq.ZeroReadOnly, 
             e.getWorldMatrix(), 
-            this.gameHooks.Classes.GameEngine.Instance.Scene.getTransformMatrix(),
-            this.gameHooks.Classes.GameCameraManager.Camera.viewport.toGlobal(this.gameHooks.Classes.GameEngine.Instance.Engine.getRenderWidth(1), this.gameHooks.Classes.GameEngine.Instance.Engine.getRenderHeight(1)),
+            this.gameHooks.GameEngine.Instance.Scene.getTransformMatrix(),
+            this.gameHooks.GameCameraManager.Camera.viewport.toGlobal(this.gameHooks.GameEngine.Instance.Engine.getRenderWidth(1), this.gameHooks.GameEngine.Instance.Engine.getRenderHeight(1)),
         );
-        const camera =  this.gameHooks.Classes.GameCameraManager.Camera;
+        const camera =  this.gameHooks.GameCameraManager.Camera;
         // camera._scene._frustrumPlanes
         const isInFrustrum = camera.isInFrustum(e);
         if (!isInFrustrum) {

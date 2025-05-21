@@ -1,10 +1,7 @@
-import { Plugin } from "../interfaces/plugin.class";
+import { Plugin } from "../core/interfaces/highlite/plugin/plugin.class";
 
 export class EnhancedHPBars extends Plugin {
     pluginName: string = "Enhanced HP Bars";
-    settings = {
-        enable: true,
-    };
 
     targetContainer : HTMLDivElement | null = null;
     previousTarget : any | null = null;
@@ -108,7 +105,7 @@ export class EnhancedHPBars extends Plugin {
             return;
         }
 
-        const target = this.gameHooks.Classes.EntityManager.Instance.MainPlayer.CurrentTarget;
+        const target = this.gameHooks.EntityManager.Instance.MainPlayer.CurrentTarget;
         if (target && target.Def && target.Def.Combat) {
             this.targetContainer.style.visibility = "visible";
             this.nameDiv.innerText = target.Name;
