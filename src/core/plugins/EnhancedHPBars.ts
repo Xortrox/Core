@@ -2,14 +2,17 @@ import { Plugin } from "../interfaces/plugin.class";
 
 export class EnhancedHPBars extends Plugin {
     pluginName: string = "Enhanced HP Bars";
+    settings = {
+        enable: true,
+    };
 
-    targetContainer: HTMLDivElement | null = null;
-    previousTarget: any | null = null;
-    lostTargetTime: number | null = null;
-    nameDiv: HTMLDivElement | null = null;
-    healthBarBack: HTMLDivElement | null = null;
-    healthBarFront: HTMLDivElement | null = null;
-    healthText: HTMLSpanElement | null = null;
+    targetContainer : HTMLDivElement | null = null;
+    previousTarget : any | null = null;
+    lostTargetTime : number | null = null;
+    nameDiv : HTMLDivElement | null = null;
+    healthBarBack : HTMLDivElement | null = null;
+    healthBarFront : HTMLDivElement | null = null;
+    healthText : HTMLSpanElement | null = null;
 
     init(): void {
         this.log("Initializing");
@@ -17,7 +20,7 @@ export class EnhancedHPBars extends Plugin {
 
     start(): void {
         this.log("Started");
-        if (this.settings.enable.value && this.targetContainer !== null) {
+        if (this.settings.enable && this.targetContainer !== null) {
             // Re-add the element to the DOM
             document.getElementById('hs-screen-mask')?.appendChild(this.targetContainer);
         }
@@ -27,8 +30,8 @@ export class EnhancedHPBars extends Plugin {
         this.targetContainer?.remove();
     }
 
-    SocketManager_loggedIn(...args: any) {
-        if (!this.settings.enable.value) {
+    SocketManager_loggedIn(...args : any) {
+        if (!this.settings.enable) {
             return;
         }
         this.targetContainer = document.createElement('div');
@@ -97,7 +100,7 @@ export class EnhancedHPBars extends Plugin {
     }
 
     GameLoop_draw() {
-        if (!this.settings.enable.value) {
+        if (!this.settings.enable) {
             return;
         }
 

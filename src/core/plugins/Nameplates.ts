@@ -1,35 +1,18 @@
 import { Plugin } from "../interfaces/plugin.class";
-import { SettingsTypes } from "../interfaces/PluginSettings";
 
 export class Nameplates extends Plugin {
     pluginName: string = "Nameplates";
+    settings = {
+        enable: true,
+        playerNameplates: true,
+        npcNameplates: true,
+    };
 
-    DOMElement: HTMLDivElement | null = null;
-
-    NampeplateContainer: HTMLDivElement | null = null;
-    NPCDomElements: {
-        [key: string]: HTMLDivElement
+    NampeplateContainer : HTMLDivElement | null = null;
+    NPCDomElements : {
+        [key : string] : HTMLDivElement
     } = {}
-    PlayerDomElements: {
-        [key: string]: HTMLDivElement
-    } = {}
-
-    constructor() {
-        super();
-        this.settings.playerNameplates = {
-            text: "Player Nameplates",
-            type: SettingsTypes.checkbox,
-            value: true,
-            callback: () => { } //NOOP
-
-        };
-        this.settings.npcNameplates = {
-            text: "NPC Nameplates",
-            type: SettingsTypes.checkbox,
-            value: true,
-            callback: () => { } //NOOP
-        };
-    }
+    PlayerDomElements = {}
 
 
     init(): void {
@@ -44,7 +27,7 @@ export class Nameplates extends Plugin {
         this.log("Stopped");
     }
 
-    SocketManager_loggedIn(...args: any) {
+    SocketManager_loggedIn(...args : any) {
         this.DOMElement = document.createElement('div');
         this.DOMElement.id = "highlite-nameplates";
         this.DOMElement.style.position = "absolute";
@@ -59,7 +42,7 @@ export class Nameplates extends Plugin {
         document.getElementById('hs-screen-mask')?.appendChild(this.DOMElement);
     }
 
-    SocketManager_handleLoggedOut(...args: any) {
+    SocketManager_handleLoggedOut(...args : any) {
         // Clear the NPC and Player DOM elements
         for (const key in this.NPCDomElements) {
             if (this.NPCDomElements[key]) {
@@ -81,10 +64,10 @@ export class Nameplates extends Plugin {
         const Players = this.gameHooks.Classes.EntityManager.Instance._players; // Array
         const playerCombatLevel = this.gameHooks.Classes.EntityManager.Instance.MainPlayer._combatLevel;
         const _W = document.client.get("_W");
-
+        
 
         // Clear non-existing NPCs
-        if (NPCS.size == 0 || this.settings.enable.value == false || this.settings.npcNameplates!.value== false) {
+        if (NPCS.size == 0 || this.settings.enable == false || this.settings.npcNameplates == false) {
             for (const key in this.NPCDomElements) {
                 this.NPCDomElements[key].remove();
                 delete this.NPCDomElements[key];
@@ -96,10 +79,10 @@ export class Nameplates extends Plugin {
                 delete this.NPCDomElements[key];
             }
         }
-
+        
 
         // Clear non-existing Players
-        if (Players.length == 0 || this.settings.enable.value == false || this.settings.playerNameplates!.value == false) {
+        if (Players.length == 0 || this.settings.enable == false || this.settings.playerNameplates == false) {
             for (const key in this.PlayerDomElements) {
                 this.PlayerDomElements[key].remove();
                 delete this.PlayerDomElements[key];
@@ -119,13 +102,13 @@ export class Nameplates extends Plugin {
             }
         }
 
-        if (!this.settings.enable.value) {
+        if (!this.settings.enable) {
             return;
         }
 
         // Loop through all NPCs
-        if (this.settings.npcNameplates!.value) {
-            for (const [key, value] of NPCS) {
+        if (this.settings.npcNameplates) {
+            for (const [key,value] of NPCS) {
                 const npc = value;
                 if (!this.NPCDomElements[key]) {
                     this.NPCDomElements[key] = document.createElement('div');
@@ -138,7 +121,7 @@ export class Nameplates extends Plugin {
                     // Center children
                     this.NPCDomElements[key].style.justifyContent = "center";
                     // this.NPCDomElements[key].innerHTML = npc._name;
-
+                    
                     // Create Name Holder
                     const nameSpan = document.createElement("div");
                     nameSpan.style.color = "yellow";
@@ -153,7 +136,7 @@ export class Nameplates extends Plugin {
                         lvlSpan.style.textAlign = "center";
                         lvlSpan.innerText = `Lvl. ${npc._combatLevel}`
                         lvlSpan.className = _W.getTextColorClassNameForCombatLevelDifference(playerCombatLevel, npc._combatLevel)
-
+                        
                         if (npc._def._combat._isAggressive && !npc._def._combat._isAlwaysAggro) {
                             lvlSpan.innerText += " 😠"
                         }
@@ -180,7 +163,7 @@ export class Nameplates extends Plugin {
             }
         }
 
-        if (this.settings.playerNameplates?.value) {
+        if (this.settings.playerNameplates) {
             for (const player of Players) {
                 if (!this.PlayerDomElements[player._entityId]) {
                     this.PlayerDomElements[player._entityId] = document.createElement('div');
@@ -190,7 +173,7 @@ export class Nameplates extends Plugin {
                     this.PlayerDomElements[player._entityId].style.zIndex = "1000";
                     this.PlayerDomElements[player._entityId].style.color = "white";
                     this.PlayerDomElements[player._entityId].innerHTML = player._name;
-                    document.getElementById('highlite-nameplates')?.appendChild(this.PlayerDomElements[player._entityId] as HTMLDivElement);
+                    document.getElementById('highlite-nameplates')?.appendChild(this.PlayerDomElements[player._entityId]);
                 }
 
                 // Check if Player is a friend
@@ -209,19 +192,19 @@ export class Nameplates extends Plugin {
                     this.updateElementPosition(playerMesh, this.PlayerDomElements[player._entityId]);
                 } catch (e) {
                     this.log("Error updating Player element position: ", e);
-                }
+                }   
             }
         }
     }
 
-    // Halo  // DIV Element
-    updateElementPosition(e: any, t: any) {
-        const translationCoordinates = document.BABYLON.Pq.Project(document.BABYLON.Pq.ZeroReadOnly,
-            e.getWorldMatrix(),
+                        // Halo  // DIV Element
+    updateElementPosition(e: any, t : any) {
+        const translationCoordinates = document.BABYLON.Pq.Project(document.BABYLON.Pq.ZeroReadOnly, 
+            e.getWorldMatrix(), 
             this.gameHooks.Classes.GameEngine.Instance.Scene.getTransformMatrix(),
             this.gameHooks.Classes.GameCameraManager.Camera.viewport.toGlobal(this.gameHooks.Classes.GameEngine.Instance.Engine.getRenderWidth(1), this.gameHooks.Classes.GameEngine.Instance.Engine.getRenderHeight(1)),
         );
-        const camera = this.gameHooks.Classes.GameCameraManager.Camera;
+        const camera =  this.gameHooks.Classes.GameCameraManager.Camera;
         // camera._scene._frustrumPlanes
         const isInFrustrum = camera.isInFrustum(e);
         if (!isInFrustrum) {

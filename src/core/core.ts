@@ -1,19 +1,17 @@
-import { Database } from "../database";
 import { ContextMenuHelper } from "./helpers/ContextMenuHelpers";
 import { NotificationHelper } from "./helpers/NotificationHelper";
 import { PluginLoader } from "./pluginLoader";
-import { Settings } from "./settings";
+import { SettingsManagement } from "./settingsManagement";
 
 export class Highlite {
     pluginLoader = new PluginLoader;
-    database = new Database;
-    settings = new Settings;
     contextMenuHelper = new ContextMenuHelper;
+    settingsManagement = new SettingsManagement;
 
     constructor() {
         console.info("[Highlite] Core Initializing!");
 
-        document.highlite = { highlite: this };
+        document.highlite = {};
         document.highlite.Helpers = {};
         document.highlite.Helpers.ContextMenu = this.contextMenuHelper;
         document.highlite.gameHooks = {};
@@ -21,8 +19,6 @@ export class Highlite {
         document.highlite.gameHooks.Listeners = {};
         document.highlite.plugins = [];
         document.BABYLON = document.client.get("ro")
-
-        this.settings = new Settings;
 
         // Listeners Hook-In
         // this.attachListeners("NI");
@@ -69,7 +65,7 @@ export class Highlite {
         this.registerStaticClassHook('dG', 'handleTargetAction');
         this.registerClassHook("ItemManager", "invokeInventoryAction");
 
-
+        
         NotificationHelper.askNotificationPermission();
         /*
          Post-Hooking, we tell HighSpell Client to start by re-running DOMContentLoaded
@@ -81,19 +77,12 @@ export class Highlite {
         }));
     }
 
-    async start() {
+    start() {
         console.info("[Highlite] Core Started!");
-        await this.database.initDB();
-        if (this.database.database) {
-            console.info("[Highlite] Database Started!");
-        } else {
-            console.error("[Highlite] Database Failed exiting...");
-            return;
-        }
-        this.settings.init();
-        this.settings.setVisible(false);
-        await this.settings.registerPlugins();
         this.pluginLoader.initAll();
+
+        this.settingsManagement.init();
+        this.settingsManagement.setVisible(false);
 
 
         this.pluginLoader.postInitAll();
@@ -113,15 +102,15 @@ export class Highlite {
 
     postLogin(...args) {
         console.info("[Highlite] Post Login Hook");
-        this.settings.setVisible(true);
+        this.settingsManagement.setVisible(true);
     }
-
+    
     postLogout(...args) {
         console.info("[Highlite] Post Logout Hook");
-        this.settings.setVisible(false);
+        this.settingsManagement.setVisible(false);
     }
 
-    registerClass(sourceClass: string, mappedName: string): boolean {
+    registerClass(sourceClass : string, mappedName : string) : boolean {
         const classInstance = document.client.get(sourceClass);
 
         if (!classInstance) {
@@ -133,7 +122,7 @@ export class Highlite {
         return true;
     }
 
-    registerClassHook(sourceClass: string, fnName: string, hookFn = this.hook): boolean {
+    registerClassHook(sourceClass : string, fnName : string, hookFn = this.hook) : boolean {
         const self = this;
         const classObject = document.highlite.gameHooks.Classes[sourceClass].prototype;
 
@@ -147,11 +136,11 @@ export class Highlite {
         }
 
         const hookName = `${sourceClass}_${functionName}`;
-        (function (originalFunction: any) {
-            classObject[fnName] = function (...args: Array<unknown>) {
+        (function (originalFunction : any) {
+            classObject[fnName] = function (...args : Array<unknown>) {
                 const originalReturn = originalFunction.apply(this, arguments);
                 hookFn.apply(self, [hookName, ...args, this]);
-
+                
                 return originalReturn;
             }
         }(classObject[fnName]));
@@ -159,7 +148,7 @@ export class Highlite {
         return true;
     }
 
-    registerStaticClassHook(sourceClass: string, fnName: string, hookFn = this.hook): boolean {
+    registerStaticClassHook(sourceClass : string, fnName : string, hookFn = this.hook) : boolean {
         const self = this;
         const classObject = document.client.get(sourceClass);
 
@@ -173,8 +162,8 @@ export class Highlite {
         }
 
         const hookName = `${sourceClass}_${functionName}`;
-        (function (originalFunction: any) {
-            classObject[fnName] = function (...args: Array<unknown>) {
+        (function (originalFunction : any) {
+            classObject[fnName] = function (...args : Array<unknown>) {
                 const returnValue = originalFunction.apply(this, arguments);
                 hookFn.apply(self, [hookName, ...args, this]);
                 return returnValue;
@@ -185,7 +174,7 @@ export class Highlite {
     }
 
 
-    hook(fnName: string, ...args: Array<unknown>) {
+    hook(fnName : string, ...args : Array<unknown>) {
         for (const plugin of this.pluginLoader.plugins) {
             if (typeof plugin[fnName] === "function") {
                 try {
