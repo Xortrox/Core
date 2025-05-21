@@ -29,18 +29,18 @@ export class NotificationManager {
     async askNotificationPermission() {
         // Check if the browser supports notifications
         if (!("Notification" in window)) {
-            console.log("[Highlite] This browser does not support notifications.");
+            console.info("[Highlite] This browser does not support notifications.");
             this.canNotify = false;
         }
 
         if (Notification.permission === "granted") {
-            console.log("[Highlite] Notification permission granted.");
+            console.info("[Highlite] Notification permission granted.");
             this.canNotify = true;
         } else if (Notification.permission === "denied") {
-            console.log("[Highlite] Notification permission denied.");
+            console.info("[Highlite] Notification permission denied.");
             this.canNotify = false;
         } else {
-            console.log("[Highlite] Notification permission dismissed.");
+            console.info("[Highlite] Notification permission dismissed.");
             this.canNotify = false;
         }
     }
