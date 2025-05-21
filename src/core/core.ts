@@ -6,6 +6,7 @@ import { PluginManager } from "./managers/highlite/pluginManger";
 import { UIManager } from "./managers/highlite/uiManager";
 import { SettingsManager } from "./managers/highlite/settingsManager";
 import { DatabaseManager } from "./managers/highlite/databaseManager";
+import { SoundManager } from "./managers/highlite/soundsManager";
 
 export class Highlite {
     hookManager : HookManager;
@@ -16,6 +17,7 @@ export class Highlite {
     panelManager : PanelManager
     settingsManager : SettingsManager;
     databaseManager : DatabaseManager;
+    soundManager : SoundManager;
 
     constructor() {
         console.info("[Highlite] Core Initializing!");
@@ -32,6 +34,7 @@ export class Highlite {
         this.pluginManager = new PluginManager();
         this.uiManager = new UIManager();
         this.panelManager = new PanelManager();
+        this.soundManager = new SoundManager();
         this.settingsManager = new SettingsManager();
         this.databaseManager = new DatabaseManager();
 

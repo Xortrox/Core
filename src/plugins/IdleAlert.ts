@@ -2,9 +2,11 @@ import { Plugin } from "../core/interfaces/highlite/plugin/plugin.class.ts";
 import { SettingsTypes } from "../core/interfaces/highlite/plugin/pluginSettings.interface.ts";
 import { ActionState } from "../core/interfaces/game/actionStates.enum.ts";
 import { NotificationManager } from "../core/managers/highlite/notificationManager.ts";
+import { SoundManager } from "../core/managers/highlite/soundsManager.ts";
 
 export class IdleAlert extends Plugin {
     private notificationManager: NotificationManager = new NotificationManager();
+    private soundManager : SoundManager = new SoundManager();
     pluginName: string = "Idle Alert";
 
     constructor() {
@@ -18,7 +20,7 @@ export class IdleAlert extends Plugin {
         this.settings.activationTicks = {
             text: "Activation Ticks",
             type: SettingsTypes.range,
-            value: 0.5,
+            value: 20,
             callback: () => { } //TODO 
         };
         this.settings.notification = {
@@ -79,30 +81,11 @@ export class IdleAlert extends Plugin {
         }
 
         if (this.idleTicks > (this.settings.activationTicks!.value as number)) {
-            const ctx = new AudioContext();
-            const gain = ctx.createGain();
-            gain.gain.value = (this.settings.volume!.value as number) / 100;
-            gain.connect(ctx.destination);
-            
-            // First chirp
-            const osc1 = ctx.createOscillator();
-            osc1.type = 'triangle';
-            osc1.frequency.setValueAtTime(440, ctx.currentTime);
-            osc1.connect(gain);
-            osc1.start(ctx.currentTime);
-            osc1.stop(ctx.currentTime + 0.2); // Chirp for 0.2 seconds
-            
-            // Second chirp (starts after 0.25 seconds)
-            const osc2 = ctx.createOscillator();
-            osc2.type = 'triangle';
-            osc2.frequency.setValueAtTime(440, ctx.currentTime + 0.25);
-            osc2.connect(gain);
-            osc2.start(ctx.currentTime + 0.25);
-            osc2.stop(ctx.currentTime + 0.45); // Another 0.2-second chirp
-
             if (this.settings.notification!.value) {
                 this.notificationManager.createNotification(`${player._name} is idle!`);
             }
+
+            this.soundManager.playSound("https://cdn.pixabay.com/download/audio/2024/04/01/audio_e939eebbb1.mp3?filename=level-up-3-199576.mp3", (this.settings.volume!.value as number / 100));
             this.actionState = 0;
             this.idleTicks = 0;
         }
