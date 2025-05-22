@@ -1,5 +1,3 @@
-import { StyleInject } from '../../core/managers/game/StyleInject.ts';
-
 export class IdleOverlay {
   overlay: HTMLElement = document.createElement('div');
 
@@ -12,18 +10,14 @@ export class IdleOverlay {
     this.overlay.className = 'highlite-idle-overlay';
     this.overlay.hidden = true;
 
-    StyleInject.inject(`
-    .highlite-idle-overlay {
-      background-color: rgba(255, 0, 0, 0.3);
-      position: fixed;
-      pointer-events: none;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 99999999;
-    }
-    `);
+    this.overlay.style.backgroundColor = 'rgba(255, 0, 0, 0.3)';
+    this.overlay.style.position = 'fixed';
+    this.overlay.style.pointerEvents = 'none';
+    this.overlay.style.top = '0';
+    this.overlay.style.left = '0';
+    this.overlay.style.right = '0';
+    this.overlay.style.bottom = '0';
+    this.overlay.style.zIndex = '99999999';
   }
 
   private bindEvents() {
