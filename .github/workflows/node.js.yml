@@ -62,7 +62,7 @@ jobs:
           name: HighliteCore
 
       - name: Create/Update GitHub Release
-      - uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           artifactErrorsFailBuild: true
