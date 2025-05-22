@@ -1,8 +1,9 @@
-import { Plugin } from "../core/interfaces/highlite/plugin/plugin.class.ts";
-import { SettingsTypes } from "../core/interfaces/highlite/plugin/pluginSettings.interface.ts";
-import { ActionState } from "../core/interfaces/game/actionStates.enum.ts";
-import { NotificationManager } from "../core/managers/highlite/notificationManager.ts";
-import { SoundManager } from "../core/managers/highlite/soundsManager.ts";
+import { Plugin } from '../../core/interfaces/highlite/plugin/plugin.class';
+import { ActionState } from '../../core/interfaces/game/actionStates.enum.ts';
+import { IdleOverlay } from './IdleOverlay.ts';
+import { NotificationManager } from '../../core/managers/highlite/notificationManager.ts';
+import { SoundManager } from '../../core/managers/highlite/soundsManager.ts';
+import { SettingsTypes } from '../../core/interfaces/highlite/plugin/pluginSettings.interface.ts';
 
 export class IdleAlert extends Plugin {
     private notificationManager: NotificationManager = new NotificationManager();
@@ -35,6 +36,8 @@ export class IdleAlert extends Plugin {
     actionState : number = ActionState.IdleState;
     idleTicks : number = 0;
     shouldTick : boolean = false;
+
+    idleOverlay : IdleOverlay = new IdleOverlay();
 
     init(): void {
         this.log("Initialized");
@@ -85,9 +88,18 @@ export class IdleAlert extends Plugin {
                 this.notificationManager.createNotification(`${player._name} is idle!`);
             }
 
+            // TODO: settings.notificationOverlay?
+            if (this.settings.notification) {
+                this.idleOverlay.show();
+            }
+
             this.soundManager.playSound("https://cdn.pixabay.com/download/audio/2024/04/01/audio_e939eebbb1.mp3?filename=level-up-3-199576.mp3", (this.settings.volume!.value as number / 100));
+
             this.actionState = 0;
             this.idleTicks = 0;
         }
     }
+
+
 }
+

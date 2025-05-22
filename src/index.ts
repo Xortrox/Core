@@ -1,6 +1,6 @@
 import { Highlite } from "./core/core";
 import { HPAlert } from "./plugins/HPAlert";
-import { IdleAlert } from "./plugins/IdleAlert";
+import { IdleAlert } from "./plugins/IdleAlert/IdleAlert";
 import { Lookup } from "./plugins/Lookup";
 import { Nameplates } from "./plugins/Nameplates";
 import { EnhancedHPBars } from "./plugins/EnhancedHPBars";

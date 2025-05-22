@@ -1,6 +1,9 @@
 import { SettingsTypes, type PluginSettings } from "./pluginSettings.interface";
 
 export abstract class Plugin {
+    /** Used for plugin[fnName] access */
+    [key: string]: any;
+
     abstract pluginName : string;
 
     abstract init(): void;
