@@ -69,7 +69,7 @@ jobs:
         with:
           allowUpdates: true
           artifactErrorsFailBuild: true
-          artifacts: HighliteCore
+          artifacts: "*"
           generateReleaseNotes: true
           prerelease: true
           tag: "v${{ env.VERSION }}"
