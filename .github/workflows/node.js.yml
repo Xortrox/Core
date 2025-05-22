@@ -42,12 +42,11 @@ jobs:
         include-hidden-files: false
 
     - name: Set Build Release Version
-      id: version
       uses: martinbeentjes/npm-get-version-action@v1.3.1
 
     - name: Debug Version
-      run: echo "Version is: ${{ steps.version.outputs.version }}"
-        
+      run: echo "Version is ${{ steps.package-version.outputs.current-version}}"
+
   Release:
     needs: [Build]
     runs-on: ubuntu-latest
