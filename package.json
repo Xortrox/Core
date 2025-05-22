@@ -1,15 +1,16 @@
 {
-  "name": "core",
-  "version": "0.1.1",
-  "module": "index.ts",
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
+  "name": "highlitecore",
+  "productName": "HighliteCore",
+  "packageManager": "yarn@4.9.1",
+  "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "main": "src/index.ts",
+  "devDependencies": {
+    "esbuild": "^0.25.4"
+  },
+  "scripts": {
+    "core:dist": "yarn esbuild src/index.ts --bundle --minify --sourcemap --outfile=dist/highliteCore.js"
+  },
   "dependencies": {
     "idb": "^8.0.3"
   }
