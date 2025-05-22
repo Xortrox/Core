@@ -4,14 +4,17 @@
 name: Build and Release
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.package-version.outputs.current-version}}.
 
     steps:
     - name: Setup Node
@@ -30,3 +33,37 @@ jobs:
 
     - name: Build HighLite
       run: yarn core:dist
+
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: HighliteCore
+        path: dist/*
+        retention-day: 1
+        compression-level: 6
+        overwrite: true
+        include-hidden-files: false
+
+    - name: Set Build Release Version
+      uses: martinbeentjes/npm-get-version-action@v1.3.1
+        
+  Release:
+    needs: [Build]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Get Build Release Version
+        run:  echo "VERSION=${{ needs.Build.outputs.version }}" >> $GITHUB_ENV
+        
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: HighliteCore
+
+      - name: Create/Update GitHub Release
+        uses: softprops/action-gh-release@v2.2.2
+        with:
+          name: v${{VERSION}}
+          prerelease: true
+          generate_release_notes: true
+  
