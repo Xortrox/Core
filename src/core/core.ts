@@ -57,6 +57,7 @@ export class Highlite {
         this.hookManager.registerClass("RX", "HealthBar")
         this.hookManager.registerClass("AF", "AF"); // Unkown Name
         this.hookManager.registerClass("aG", "aG") // Unkown Name
+        // this.hookManager.registerClass("cG", "cG") // Unkown Name
 
         // Function Hook-ins
         this.hookManager.registerClassHook("GameLoop", "_update");
@@ -73,6 +74,7 @@ export class Highlite {
         this.contextMenuManager.registerContextHook("vG", "_createGameWorldContextMenuItems", this.contextMenuManager.gameWorldContextHook);
         this.hookManager.registerClassHook("ItemManager", "invokeInventoryAction");
         this.hookManager.registerStaticClassHook('dG', 'handleTargetAction');
+        this.hookManager.registerStaticClassHook('dG', 'getActionsAndEntitiesAtMousePointer', this.contextMenuManager.ActionSorting);
     };
 
     async start() {

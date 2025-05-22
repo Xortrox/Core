@@ -15,6 +15,8 @@ export class ContextMenuManager {
     defaultActions = {};
     inventoryActions = {};
     gameWorldActions = {};
+    gameWorldActionsSorting = {};
+    inventoryActionsSorting = {};
     spellActions = {};
 
     constructor() {
@@ -141,14 +143,14 @@ export class ContextMenuManager {
 
         // Check if this.inventoryActions has key 'r'
         if (this.inventoryActions[r] !== undefined) {
-            const contextMenuActionsContextSpecific = this.inventoryAction[r][ActionState.Any];
+            const contextMenuActionsContextSpecific = this.inventoryActions[r][ActionState.Any];
             if (contextMenuActionsContextSpecific) {
                 for (const [actionName, actionInformation] of Object.entries(contextMenuActionsContextSpecific)) {
                     output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this, r, ActionState.Any), r, actionInformation.actionNumber, i, n, null, 0));
                 }
             }
             
-            const contextMenuActionsContextSpecificActionSpecific = this.inventoryAction[r][document.highlite.gameHooks.EntityManager.Instance._mainPlayer._currentState.getCurrentState()];
+            const contextMenuActionsContextSpecificActionSpecific = this.inventoryActions[r][document.highlite.gameHooks.EntityManager.Instance._mainPlayer._currentState.getCurrentState()];
             if (contextMenuActionsContextSpecificActionSpecific) {
                 for (const [actionName, actionInformation] of Object.entries(contextMenuActionsContextSpecificActionSpecific)) {
                     output.push(aG._contextMenuItemFactory.createInventoryItemContextMenuItem(this.inventoryActionHandler.bind(this, r, document.highlite.gameHooks.EntityManager.Instance._mainPlayer._currentState.getCurrentState()), r, actionInformation.actionNumber, i, n, null, 0));
@@ -172,6 +174,17 @@ export class ContextMenuManager {
                 }
             }
         }
+
+
+        output.sort((a, b) => {
+            const aActionNumber = a.Action;
+            const bActionNumber = b.Action;
+
+            const aPosition = this.inventoryActionsSorting[aActionNumber] !== undefined ? this.inventoryActionsSorting[aActionNumber] : output.length;
+            const bPosition = this.inventoryActionsSorting[bActionNumber] !== undefined ? this.inventoryActionsSorting[bActionNumber] : output.length;
+
+            return aPosition - bPosition;
+        });
 
         return output;
     }
@@ -211,6 +224,10 @@ export class ContextMenuManager {
             }
         }
 
+        // Output is an array of ContextMenuItems, a ContextMenuItem has a property called Action which is the actionNumber
+        // Based on the actionNumber, if we can find it in the gameWorldSorting, we need to place it in the correct position
+        // In some cases, we expect that the position may exceed the length of the array, in that case we need to place it at the end of the array
+
 
         return outputs;
     }
@@ -244,6 +261,23 @@ export class ContextMenuManager {
         }
     }
 
+    SetGameWorldActionMeuPosition(actionName : string, position : number) {
+        //ActionName should be converted to all lowercase and spaces replace with _s
+        let lookupName = actionName.toLowerCase().replace(/ /g, "_");
+
+        const ContextMenuActions = document.client.get('VA');
+        if (ContextMenuActions[lookupName] !== undefined) {
+            this.gameWorldActionsSorting[ContextMenuActions[lookupName]] = position;
+        }
+    }
+
+    SetInventoryActionMeuPosition(actionName : string, position : number) {
+        const ContextMenuActions = document.client.get('QA');
+        if (ContextMenuActions[actionName] !== undefined) {
+            this.inventoryActionsSorting[ContextMenuActions[actionName]] = position;
+        }
+    }
+
     registerContextHook(sourceClass : string, fnName : string, hookFn : Function) : boolean {
         const self = this;
         const classObject = document.client.get(sourceClass).prototype;
@@ -256,5 +290,47 @@ export class ContextMenuManager {
         }(classObject[fnName]));
 
         return true;
+    }
+
+    public registerStaticContextHook(sourceClass : string, fnName : string, hookFn = Function) : boolean {
+        const self = this;
+        const classObject = document.client.get(sourceClass);
+
+        if (!classObject) {
+            console.warn(`[Highlite] Attempted to register unknown static client class hook (${sourceClass}).`);
+            return false;
+        }
+
+        let functionName = fnName;
+        if (functionName.startsWith("_")) {
+            functionName = functionName.substring(1)
+        }
+
+        const hookName = `${sourceClass}_${functionName}`;
+        (function (originalFunction : any) {
+            classObject[fnName] = function (...args : Array<unknown>) {
+                const returnValue = originalFunction.apply(this, arguments);
+                hookFn.apply(self, [hookName, ...args, this]);
+                return returnValue;
+            }
+        }(classObject[fnName]));
+        return true;
+    }
+
+    ActionSorting(e, t, i, j, dG) {
+        const contextMenuManager : ContextMenuManager= new ContextMenuManager();
+        if (!dG || !dG._mousePointActionsAndEntitiesResult || !dG._mousePointActionsAndEntitiesResult._actionsAndEntities) {
+            return;
+        }
+        
+        dG._mousePointActionsAndEntitiesResult._actionsAndEntities.sort((a, b) => {
+            const aActionNumber = a.Action;
+            const bActionNumber = b.Action;
+
+            const aPosition = contextMenuManager.gameWorldActionsSorting[aActionNumber] !== undefined ? contextMenuManager.gameWorldActionsSorting[aActionNumber] : dG._mousePointActionsAndEntitiesResult._actionsAndEntities.length;
+            const bPosition = contextMenuManager.gameWorldActionsSorting[bActionNumber] !== undefined ? contextMenuManager.gameWorldActionsSorting[bActionNumber] : dG._mousePointActionsAndEntitiesResult._actionsAndEntities.length;
+
+            return aPosition - bPosition;
+        });
     }
 }
