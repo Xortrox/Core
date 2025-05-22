@@ -62,9 +62,13 @@ jobs:
           name: HighliteCore
 
       - name: Create/Update GitHub Release
-        uses: softprops/action-gh-release@v2.2.2
+      - uses: ncipollo/release-action@v1
         with:
-          name: "Release v${{ env.VERSION }}"
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          artifacts: "dist/*"
+          generateReleaseNotes: true
           prerelease: true
-          generate_release_notes: true
+          tag: "v${{ env.VERSION }}"
+          updateOnlyUnreleased: true
   
