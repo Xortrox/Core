@@ -11,7 +11,7 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.package-version.outputs.current-version}}
+      version: ${{ steps.get_version.outputs.version }}
 
     steps:
     - name: Setup Node
@@ -41,12 +41,13 @@ jobs:
         overwrite: true
         include-hidden-files: false
 
-    - name: Set Build Release Version
-      uses: martinbeentjes/npm-get-version-action@v1.3.1
-
-    - name: Debug Version
-      run: echo "Version is ${{ steps.package-version.outputs.current-version}}"
-
+    - name: Get Version from package.json
+      id: get_version
+      run: |
+        VERSION=$(jq -r '.version' package.json)
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "::set-output name=version::$VERSION"
+        
   Release:
     needs: [Build]
     runs-on: ubuntu-latest
