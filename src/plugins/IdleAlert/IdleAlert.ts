@@ -1,16 +1,36 @@
-import { Plugin } from '../../interfaces/plugin.class';
-import { ActionState } from '../../interfaces/game/actionStates.enum.ts';
-import { NotificationHelper } from '../../helpers/NotificationHelper.ts';
+import { Plugin } from '../../core/interfaces/highlite/plugin/plugin.class';
+import { ActionState } from '../../core/interfaces/game/actionStates.enum.ts';
 import { IdleOverlay } from './IdleOverlay.ts';
+import { NotificationManager } from '../../core/managers/highlite/notificationManager.ts';
+import { SoundManager } from '../../core/managers/highlite/soundsManager.ts';
+import { SettingsTypes } from '../../core/interfaces/highlite/plugin/pluginSettings.interface.ts';
 
 export class IdleAlert extends Plugin {
+    private notificationManager: NotificationManager = new NotificationManager();
+    private soundManager : SoundManager = new SoundManager();
     pluginName: string = "Idle Alert";
-    settings = {
-        enable: true,
-        volume: 50,
-        activationTicks: 20,
-        notification: true,
-    };
+
+    constructor() {
+        super();
+        this.settings.volume = {
+            text: "Volume",
+            type: SettingsTypes.range,
+            value: 50,
+            callback: () => { } //TODO 
+        };
+        this.settings.activationTicks = {
+            text: "Activation Ticks",
+            type: SettingsTypes.range,
+            value: 20,
+            callback: () => { } //TODO 
+        };
+        this.settings.notification = {
+            text: "Notification",
+            type: SettingsTypes.checkbox,
+            value: false,
+            callback: () => { } //TODO 
+        };
+    }
 
     ignoredStates: ActionState[] = [ActionState.BankingState, ActionState.ClimbSameMapLevelState, ActionState.GoThroughDoorState, ActionState.PlayerLoggingOutState, ActionState.PlayerDeadState, ActionState.StunnedState, ActionState.TradingState];
     actionState : number = ActionState.IdleState;
@@ -30,10 +50,10 @@ export class IdleAlert extends Plugin {
     }
     
     GameLoop_update(...args : any) {
-        if (!this.settings.enable) {
+        if (!this.settings.enable.value) {
             return;
         }
-        const player = this.gameHooks.Classes.EntityManager.Instance._mainPlayer;
+        const player = this.gameHooks.EntityManager.Instance._mainPlayer;
 
         if (player === undefined) {
             return;
@@ -63,36 +83,17 @@ export class IdleAlert extends Plugin {
             this.idleTicks = 0;
         }
 
-        if (this.idleTicks > this.settings.activationTicks) {
-            const ctx = new AudioContext();
-            const gain = ctx.createGain();
-            gain.gain.value = this.settings.volume / 100;
-            gain.connect(ctx.destination);
-            
-            // First chirp
-            const osc1 = ctx.createOscillator();
-            osc1.type = 'triangle';
-            osc1.frequency.setValueAtTime(440, ctx.currentTime);
-            osc1.connect(gain);
-            osc1.start(ctx.currentTime);
-            osc1.stop(ctx.currentTime + 0.2); // Chirp for 0.2 seconds
-            
-            // Second chirp (starts after 0.25 seconds)
-            const osc2 = ctx.createOscillator();
-            osc2.type = 'triangle';
-            osc2.frequency.setValueAtTime(440, ctx.currentTime + 0.25);
-            osc2.connect(gain);
-            osc2.start(ctx.currentTime + 0.25);
-            osc2.stop(ctx.currentTime + 0.45); // Another 0.2-second chirp
-
-            if (this.settings.notification) {
-                NotificationHelper.showNotification(`${player._name} is idle!`);
+        if (this.idleTicks > (this.settings.activationTicks!.value as number)) {
+            if (this.settings.notification!.value) {
+                this.notificationManager.createNotification(`${player._name} is idle!`);
             }
 
             // TODO: settings.notificationOverlay?
             if (this.settings.notification) {
                 this.idleOverlay.show();
             }
+
+            this.soundManager.playSound("https://cdn.pixabay.com/download/audio/2024/04/01/audio_e939eebbb1.mp3?filename=level-up-3-199576.mp3", (this.settings.volume!.value as number / 100));
 
             this.actionState = 0;
             this.idleTicks = 0;

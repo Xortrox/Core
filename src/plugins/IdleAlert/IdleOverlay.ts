@@ -1,4 +1,4 @@
-import { StyleInject } from '../../helpers/StyleInject.ts';
+import { StyleInject } from '../../core/managers/game/StyleInject.ts';
 
 export class IdleOverlay {
   overlay: HTMLElement = document.createElement('div');
