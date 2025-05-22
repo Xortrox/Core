@@ -11,7 +11,7 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.package-version.outputs.current-version}}.
+      version: ${{ steps.package-version.outputs.current-version}}
 
     steps:
     - name: Setup Node
@@ -42,7 +42,11 @@ jobs:
         include-hidden-files: false
 
     - name: Set Build Release Version
+      id: version
       uses: martinbeentjes/npm-get-version-action@v1.3.1
+
+    - name: Debug Version
+      run: echo "Version is: ${{ steps.version.outputs.version }}"
         
   Release:
     needs: [Build]
