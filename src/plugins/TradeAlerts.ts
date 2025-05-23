@@ -55,7 +55,7 @@ export class TradeAlerts extends Plugin {
           }
 
           if (this.settings.sound!.value as boolean) {
-            this.soundManager.playSound("https://cdn.pixabay.com/download/audio/2025/05/06/audio_2fd68b9a9a.mp3", this.settings.volume!.value as number);
+            this.soundManager.playSound("https://cdn.pixabay.com/download/audio/2025/05/06/audio_2fd68b9a9a.mp3", (this.settings.volume!.value as number / 100));
           }
         }
     }

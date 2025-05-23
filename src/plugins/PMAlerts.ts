@@ -44,13 +44,13 @@ export class PMAlerts extends Plugin {
     }
 
 
-    PrivateMessageList_addChatMessage(e: string, t: any, i: any, n: any, r: any, s: any, a: any, o: any, l: any, h: any) {
+    PrivateChatMessageList_addChatMessage(e: string, t: any, i: any, n: any, r: any, s: any, a: any, o: any, l: any, h: any) {
         if (e.startsWith("From")) {
             if (this.settings.notification!.value as boolean) {
-                this.notificationManager.createNotification("You have received a private message from" + e.replace("From ", ""));
+                this.notificationManager.createNotification("You have received a private message from" + e.replace("From ", " "));
             }
             if (this.settings.sound!.value as boolean) {
-                this.soundManager.playSound("https://cdn.pixabay.com/download/audio/2024/11/27/audio_e6b2e5efcc.mp3", this.settings.volume!.value as number);
+                this.soundManager.playSound("https://cdn.pixabay.com/download/audio/2024/11/27/audio_e6b2e5efcc.mp3", (this.settings.volume!.value as number / 100));
             }
         }
     }
