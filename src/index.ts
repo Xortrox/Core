@@ -6,6 +6,8 @@ import { Nameplates } from "./plugins/Nameplates";
 import { EnhancedHPBars } from "./plugins/EnhancedHPBars";
 import { EnhancedLoginScreen } from "./plugins/EnhancedLoginScreen";
 import { ContextMenuOptions } from "./plugins/ContextMenuOptions";
+import { TradeAlerts } from "./plugins/TradeAlerts";
+import { PMAlerts } from "./plugins/PMAlerts";
 
 // Wait for document.client to be defined from the HighSpell client
 const waitForLoader = () => {
@@ -32,6 +34,8 @@ waitForLoader().then(() => {
     highlite.pluginManager.registerPlugin(EnhancedHPBars);
     highlite.pluginManager.registerPlugin(EnhancedLoginScreen);
     highlite.pluginManager.registerPlugin(ContextMenuOptions);
+    highlite.pluginManager.registerPlugin(TradeAlerts);
+    highlite.pluginManager.registerPlugin(PMAlerts);
 
     // Start the highlite instance
     highlite.start();

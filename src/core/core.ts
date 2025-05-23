@@ -57,14 +57,17 @@ export class Highlite {
         this.hookManager.registerClass("RX", "HealthBar")
         this.hookManager.registerClass("AF", "AF"); // Unkown Name
         this.hookManager.registerClass("aG", "aG") // Unkown Name
+        this.hookManager.registerClass("DW", "PrivateChatMessageList");
         // this.hookManager.registerClass("cG", "cG") // Unkown Name
 
         // Function Hook-ins
         this.hookManager.registerClassHook("GameLoop", "_update");
         this.hookManager.registerClassHook("GameLoop", "_draw");
+        this.hookManager.registerClassHook("PrivateChatMessageList", "addChatMessage");
         this.hookManager.registerClassHook("SocketManager", "_loggedIn");
         this.hookManager.registerClassHook("SocketManager", "_handleLoggedOut");
         this.hookManager.registerClassHook("SocketManager", "_handleEnteredIdleStateAction");
+        this.hookManager.registerClassHook("SocketManager", "_handleTradeRequestedPacket");
         this.hookManager.registerClassHook("EntityManager", "addOtherPlayer");
         this.hookManager.registerClassHook("HealthBar", "_updateCurrentHealthbarColor");
 
