@@ -73,13 +73,13 @@ export class HPAlert extends Plugin {
 
             // Check if any entity in localEntities (map object) .CurrentTarget is the player
             const isPlayerTargeted = localNPCs.entries().some(([_, npc]) => {
-                    if (npc.CurrentTarget === undefined || npc.CurrentTarget === null) {
+                    if (npc.CurrentTarget === undefined || npc.CurrentTarget === null || npc.Combat == null) {
                         return false;
                     }
                     return npc.CurrentTarget._id == player._id;
                 });
 
-            if (this.settings.sound?.value && (isPlayerTargeted || (player.CurrentTarget !== undefined && player.CurrentTarget !== null))) {
+            if (this.settings.sound?.value && (isPlayerTargeted || (player.CurrentTarget !== undefined && player.CurrentTarget !== null && player.CurrentTarget.Combat != null && player.CurrentTarget != undefined))) {
                 this.soundManager.playSound("https://cdn.pixabay.com/download/audio/2022/03/20/audio_c35359a867.mp3", ((this.settings.volume!.value as number) / 100));
             }
             

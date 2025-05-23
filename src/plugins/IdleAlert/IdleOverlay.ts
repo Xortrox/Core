@@ -29,12 +29,13 @@ export class IdleOverlay {
       /** Likely unwanted, at least not part of runelite as far as I'm aware */
       // 'mousemove',
       'touchstart',
-      'pointerdown'
+      'pointerdown',
+      'pointerup',
     ].forEach(eventType => {
       /**
        * We use passive: true for faster scroll handling/performance boost
        * */
-      window.addEventListener(eventType, this.onClientInteraction.bind(this), { passive: true });
+      window.addEventListener(eventType, this.onClientInteraction.bind(this), {capture: true, passive: true});
     });
   }
 
