@@ -25,6 +25,7 @@ export class SoundManager {
         audio.volume = volume;
         audio.play();
         audio.onended = () => {
+            this.currentlyPlaying[resource]?.remove();
             delete this.currentlyPlaying[resource];
         }
         this.currentlyPlaying[resource] = audio;

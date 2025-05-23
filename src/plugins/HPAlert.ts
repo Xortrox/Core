@@ -29,6 +29,12 @@ export class HPAlert extends Plugin {
             value: false,
             callback: () => { } //NOOP 
         }
+        this.settings.sound = {
+            text: "Sound",
+            type: SettingsTypes.checkbox,
+            value: true,
+            callback: () => { } //NOOP 
+        }
     }
 
     init(): void {
@@ -49,6 +55,7 @@ export class HPAlert extends Plugin {
             return;
         }
         const player = this.gameHooks.EntityManager.Instance._mainPlayer;
+        const localNPCs = this.gameHooks.EntityManager.Instance._npcs;
 
         if (player === undefined) {
             return;
@@ -63,7 +70,19 @@ export class HPAlert extends Plugin {
                 this.doNotify = false;
                 this.notificationManager.createNotification(`${player._name} is low on health!`);
             }
-            this.soundManager.playSound("https://cdn.pixabay.com/download/audio/2022/03/20/audio_c35359a867.mp3?filename=heartbeat-loop-96879.mp3", ((this.settings.volume!.value as number) / 100));
+
+            // Check if any entity in localEntities (map object) .CurrentTarget is the player
+            const isPlayerTargeted = localNPCs.entries().some(([_, npc]) => {
+                    if (npc.CurrentTarget === undefined || npc.CurrentTarget === null) {
+                        return false;
+                    }
+                    return npc.CurrentTarget._id == player._id;
+                });
+
+            if (this.settings.sound?.value && (isPlayerTargeted || (player.CurrentTarget !== undefined && player.CurrentTarget !== null))) {
+                this.soundManager.playSound("https://cdn.pixabay.com/download/audio/2022/03/20/audio_c35359a867.mp3", ((this.settings.volume!.value as number) / 100));
+            }
+            
         } else {
             this.doNotify = true;
         }

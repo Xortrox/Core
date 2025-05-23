@@ -261,7 +261,7 @@ export class ContextMenuManager {
         }
     }
 
-    SetGameWorldActionMeuPosition(actionName : string, position : number) {
+    SetGameWorldActionMenuPosition(actionName : string, position : number) {
         //ActionName should be converted to all lowercase and spaces replace with _s
         let lookupName = actionName.toLowerCase().replace(/ /g, "_");
 
@@ -271,10 +271,27 @@ export class ContextMenuManager {
         }
     }
 
-    SetInventoryActionMeuPosition(actionName : string, position : number) {
+    RemoveGameWorldActionMenuPosition(actionName : string) {
+        //ActionName should be converted to all lowercase and spaces replace with _s
+        let lookupName = actionName.toLowerCase().replace(/ /g, "_");
+
+        const ContextMenuActions = document.client.get('VA');
+        if (ContextMenuActions[lookupName] !== undefined) {
+            delete this.gameWorldActionsSorting[ContextMenuActions[lookupName]];
+        }
+    }
+
+    SetInventoryActionMenuPosition(actionName : string, position : number) {
         const ContextMenuActions = document.client.get('QA');
         if (ContextMenuActions[actionName] !== undefined) {
             this.inventoryActionsSorting[ContextMenuActions[actionName]] = position;
+        }
+    }
+
+    RemoveInventoryActionMenuPosition(actionName : string) {
+        const ContextMenuActions = document.client.get('QA');
+        if (ContextMenuActions[actionName] !== undefined) {
+            delete this.inventoryActionsSorting[ContextMenuActions[actionName]];
         }
     }
 
@@ -327,8 +344,12 @@ export class ContextMenuManager {
             const aActionNumber = a.Action;
             const bActionNumber = b.Action;
 
-            const aPosition = contextMenuManager.gameWorldActionsSorting[aActionNumber] !== undefined ? contextMenuManager.gameWorldActionsSorting[aActionNumber] : dG._mousePointActionsAndEntitiesResult._actionsAndEntities.length;
-            const bPosition = contextMenuManager.gameWorldActionsSorting[bActionNumber] !== undefined ? contextMenuManager.gameWorldActionsSorting[bActionNumber] : dG._mousePointActionsAndEntitiesResult._actionsAndEntities.length;
+            // Get current position of the action
+            const currentPositionA = dG._mousePointActionsAndEntitiesResult._actionsAndEntities.indexOf(a);
+            const currentPositionB = dG._mousePointActionsAndEntitiesResult._actionsAndEntities.indexOf(b);
+
+            const aPosition = contextMenuManager.gameWorldActionsSorting[aActionNumber] !== undefined ? contextMenuManager.gameWorldActionsSorting[aActionNumber] : currentPositionA;
+            const bPosition = contextMenuManager.gameWorldActionsSorting[bActionNumber] !== undefined ? contextMenuManager.gameWorldActionsSorting[bActionNumber] : currentPositionB;
 
             return aPosition - bPosition;
         });

@@ -30,6 +30,13 @@ export class IdleAlert extends Plugin {
             value: false,
             callback: () => { } //TODO 
         };
+
+        this.settings.idleOverlay = {
+            text: "Overlay",
+            type: SettingsTypes.checkbox,
+            value: false,
+            callback: () => { } //TODO 
+        };
     }
 
     ignoredStates: ActionState[] = [ActionState.BankingState, ActionState.ClimbSameMapLevelState, ActionState.GoThroughDoorState, ActionState.PlayerLoggingOutState, ActionState.PlayerDeadState, ActionState.StunnedState, ActionState.TradingState];
@@ -84,12 +91,12 @@ export class IdleAlert extends Plugin {
         }
 
         if (this.idleTicks > (this.settings.activationTicks!.value as number)) {
-            if (this.settings.notification!.value) {
+            if (this.settings.notification!.value) {``
                 this.notificationManager.createNotification(`${player._name} is idle!`);
             }
 
             // TODO: settings.notificationOverlay?
-            if (this.settings.notification) {
+            if (this.settings.idleOverlay!.value) {
                 this.idleOverlay.show();
             }
 

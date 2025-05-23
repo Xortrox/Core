@@ -19,6 +19,13 @@ export class Nameplates extends Plugin {
             value: true,
             callback: () => { } //NOOP
         };
+
+        this.settings.youNameplate = {
+            text: "You Nameplate",
+            type: SettingsTypes.checkbox,
+            value: true,
+            callback: () => { } //NOOP
+        };
     }
 
     NampeplateContainer : HTMLDivElement | null = null;
@@ -77,7 +84,8 @@ export class Nameplates extends Plugin {
     GameLoop_draw() {
         const NPCS = this.gameHooks.EntityManager.Instance._npcs; // Map
         const Players = this.gameHooks.EntityManager.Instance._players; // Array
-        const playerCombatLevel = this.gameHooks.EntityManager.Instance.MainPlayer._combatLevel;
+        const MainPlayer = this.gameHooks.EntityManager.Instance.MainPlayer;
+        const playerCombatLevel = MainPlayer._combatLevel;
         const _W = document.client.get("_W");
 
 
@@ -105,15 +113,9 @@ export class Nameplates extends Plugin {
         }
 
         for (const key in this.PlayerDomElements) {
-            for (const player of Players) {
-                if (key == player._entityId) {
-                    break;
-                }
-
-                if (player == Players[Players.length - 1]) {
-                    this.PlayerDomElements[key]!.remove();
-                    delete this.PlayerDomElements[key];
-                }
+            if (!Players[key] && key != MainPlayer._entityId || (key == MainPlayer._entityId && !this.settings.youNameplate!.value)) {
+                this.PlayerDomElements[key]!.remove();
+                delete this.PlayerDomElements[key];
             }
         }
 
@@ -208,6 +210,26 @@ export class Nameplates extends Plugin {
                 } catch (e) {
                     this.log("Error updating Player element position: ", e);
                 }   
+            }
+        }
+
+        if (this.settings.youNameplate!.value) {
+            if (!this.PlayerDomElements[MainPlayer._entityId]) {
+                this.PlayerDomElements[MainPlayer._entityId] = document.createElement('div');
+                this.PlayerDomElements[MainPlayer._entityId]!.id = `highlite-nameplates-${MainPlayer._entityId}`;
+                this.PlayerDomElements[MainPlayer._entityId]!.style.position = "absolute";
+                this.PlayerDomElements[MainPlayer._entityId]!.style.pointerEvents = "none";
+                this.PlayerDomElements[MainPlayer._entityId]!.style.zIndex = "1000";
+                this.PlayerDomElements[MainPlayer._entityId]!.style.color = "cyan";
+                this.PlayerDomElements[MainPlayer._entityId]!.innerHTML = MainPlayer._name;
+                document.getElementById('highlite-nameplates')?.appendChild(this.PlayerDomElements[MainPlayer._entityId]!);
+            }
+
+            const playerMesh = MainPlayer._appearance._haloNode;
+            try {
+                this.updateElementPosition(playerMesh, this.PlayerDomElements[MainPlayer._entityId]);
+            } catch (e) {
+                this.log("Error updating Player element position: ", e);
             }
         }
     }

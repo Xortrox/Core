@@ -1,5 +1,7 @@
+import { UIManager, UIManagerScope } from "../../core/managers/highlite/uiManager";
+
 export class IdleOverlay {
-  overlay: HTMLElement = document.createElement('div');
+  overlay: HTMLElement = new UIManager().createElement(UIManagerScope.ClientRelative);
 
   constructor() {
     this.touchIdleOverlay();
@@ -7,22 +9,20 @@ export class IdleOverlay {
   }
 
   private touchIdleOverlay() {
-    this.overlay.className = 'highlite-idle-overlay';
+    this.overlay.classList.add('highlite-idle-overlay');
     this.overlay.hidden = true;
 
+    // We force the overlay to be on top of everything
     this.overlay.style.backgroundColor = 'rgba(255, 0, 0, 0.3)';
-    this.overlay.style.position = 'fixed';
+    this.overlay.style.position = 'absolute';
     this.overlay.style.pointerEvents = 'none';
-    this.overlay.style.top = '0';
-    this.overlay.style.left = '0';
-    this.overlay.style.right = '0';
-    this.overlay.style.bottom = '0';
     this.overlay.style.zIndex = '99999999';
+    this.overlay.style.width = '-webkit-fill-available';
+    this.overlay.style.height = '-webkit-fill-available';
   }
 
   private bindEvents() {
-    window.addEventListener('focus', this.onClientInteraction);
-
+    window.addEventListener('focus', this.onClientInteraction.bind(this));
     [
       'click',
       'keydown',
@@ -34,7 +34,7 @@ export class IdleOverlay {
       /**
        * We use passive: true for faster scroll handling/performance boost
        * */
-      window.addEventListener(eventType, this.onClientInteraction, { passive: true });
+      window.addEventListener(eventType, this.onClientInteraction.bind(this), { passive: true });
     });
   }
 

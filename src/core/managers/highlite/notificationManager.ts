@@ -17,6 +17,7 @@ export class NotificationManager {
         }
 
         const notification = new Notification("Highlite", {
+            icon: "./static/icons/icon.png",
             body: message
         });
         notification.onclick = () => {
